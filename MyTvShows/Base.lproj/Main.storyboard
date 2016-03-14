@@ -31,7 +31,7 @@
                     <navigationItem key="navigationItem" title="My Series" id="LXx-1f-NM2">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vTg-Wq-sOd">
                             <connections>
-                                <segue destination="qLV-MH-5Zm" kind="presentation" id="t1t-DR-wws"/>
+                                <segue destination="qLV-MH-5Zm" kind="presentation" identifier="AddSerie" id="t1t-DR-wws"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

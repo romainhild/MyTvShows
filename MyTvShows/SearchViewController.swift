@@ -10,6 +10,8 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
+    var delegate: SearchViewControllerDelegate?
+    
     var language = ""
 
     var searchResults = [SearchResult]()
@@ -148,6 +150,7 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        delegate?.searchViewController(self, addSerie: Serie(id: searchResults[indexPath.row].id))
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
@@ -181,4 +184,8 @@ extension SearchViewController: NSXMLParserDelegate {
             }
         }
     }
+}
+
+protocol SearchViewControllerDelegate: class {
+    func searchViewController(controller: SearchViewController, addSerie serie: Serie)
 }

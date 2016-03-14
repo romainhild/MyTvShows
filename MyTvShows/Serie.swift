@@ -9,7 +9,12 @@
 import Foundation
 
 class Serie {
-    let id = 0
-    let name = ""
-    let lang = ""
+    var seriesid: Int
+    var name = ""
+    var lang = ""
+    
+    init( id: Int) {
+        seriesid = id
+        // download banner and ...
+    }
 }
