@@ -91,7 +91,24 @@ class MySeriesTableViewController: UITableViewController {
             let naviguation = segue.destinationViewController as! UINavigationController
             let searchController = naviguation.topViewController as! SearchViewController
             searchController.delegate = self
+        } else if segue.identifier == "SerieInfo" {
+            let serie = sender as! Serie
+            let controller = segue.destinationViewController as! SeriesInfoViewController
+            controller.serie = serie
         }
+    }
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if mySeries.count == 0 {
+            return nil
+        } else {
+            return indexPath
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        performSegueWithIdentifier("SerieInfo", sender: mySeries[indexPath.row])
     }
 }
 

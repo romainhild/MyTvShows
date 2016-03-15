@@ -35,6 +35,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="N6c-4U-i94" kind="show" identifier="SerieInfo" id="zfp-z1-i2v"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5f-zb-j3S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -93,7 +96,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2054" y="97"/>
+            <point key="canvasLocation" x="1320" y="-661"/>
+        </scene>
+        <!--Series Info View Controller-->
+        <scene sceneID="ZLD-Sq-AFL">
+            <objects>
+                <viewController id="N6c-4U-i94" customClass="SeriesInfoViewController" customModule="MyTvShows" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="iKW-LR-FDB"/>
+                        <viewControllerLayoutGuide type="bottom" id="O0q-Bh-ALX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KLk-TZ-Nwe">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="spR-dk-bXA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1320" y="97"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="u5z-VF-GQO">
@@ -129,7 +150,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9dX-Qy-TaY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1259" y="97"/>
+            <point key="canvasLocation" x="535" y="-661"/>
         </scene>
     </scenes>
 </document>
