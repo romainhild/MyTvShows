@@ -35,8 +35,8 @@ class TvDBApiSingleton {
         return NSURL(string: "\(mirror)/api/GetSeries.php?seriesname=\(escapedSearchText)\(language)")!
     }
     
-    func urlForBanner(banner: String) -> NSURL {
-        let escapedBanner = banner.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        return NSURL(string: "\(mirror)/banners/\(escapedBanner)")!
+    func urlForImage(path: String) -> NSURL {
+        let escapedPath = path.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        return NSURL(string: "\(mirror)/banners/\(escapedPath)")!
     }
 }

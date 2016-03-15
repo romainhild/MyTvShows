@@ -37,7 +37,7 @@ class SerieBannerTableViewCell: UITableViewCell {
         bannerImageView.image = UIImage()
         if !serie.banner.isEmpty {
             let tvDBApi = TvDBApiSingleton.sharedInstance
-            let url = tvDBApi.urlForBanner(serie.banner)
+            let url = tvDBApi.urlForImage(serie.banner)
             downloadTask = bannerImageView.loadImageWithURL(url)
         }
     }

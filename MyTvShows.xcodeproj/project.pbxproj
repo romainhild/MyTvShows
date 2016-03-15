@@ -20,7 +20,7 @@
 		902705E61C981FE400755ADC /* UIImageView + DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */; };
 		902705E81C9821EF00755ADC /* TvDBApiSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E71C9821EF00755ADC /* TvDBApiSingleton.swift */; };
 		902705EA1C984F7C00755ADC /* MySeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E91C984F7C00755ADC /* MySeries.swift */; };
-		902705EC1C98874B00755ADC /* SeriesInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */; };
+		902705EE1C98952500755ADC /* SerieInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705ED1C98952500755ADC /* SerieInfoTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +39,7 @@
 		902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView + DownloadImage.swift"; sourceTree = "<group>"; };
 		902705E71C9821EF00755ADC /* TvDBApiSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvDBApiSingleton.swift; sourceTree = "<group>"; };
 		902705E91C984F7C00755ADC /* MySeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySeries.swift; sourceTree = "<group>"; };
-		902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesInfoViewController.swift; sourceTree = "<group>"; };
+		902705ED1C98952500755ADC /* SerieInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerieInfoTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 				902705C91C97502700755ADC /* AppDelegate.swift */,
 				902705DD1C97687100755ADC /* MySeriesTableViewController.swift */,
 				902705CB1C97502700755ADC /* SearchViewController.swift */,
-				902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */,
+				902705ED1C98952500755ADC /* SerieInfoTableViewController.swift */,
 				902705E11C976FD500755ADC /* SerieBannerCell.xib */,
 				902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */,
 				902705E31C97716C00755ADC /* SerieBannerTableViewCell.swift */,
@@ -172,8 +172,8 @@
 				902705E41C97716C00755ADC /* SerieBannerTableViewCell.swift in Sources */,
 				902705E81C9821EF00755ADC /* TvDBApiSingleton.swift in Sources */,
 				902705E01C976DC900755ADC /* Serie.swift in Sources */,
+				902705EE1C98952500755ADC /* SerieInfoTableViewController.swift in Sources */,
 				902705EA1C984F7C00755ADC /* MySeries.swift in Sources */,
-				902705EC1C98874B00755ADC /* SeriesInfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -180,7 +180,7 @@ extension Serie: NSXMLParserDelegate {
                 fanart += string
             case "lastupdated":
                 lastupdatedAsString += string
-            case "posters":
+            case "poster":
                 posters += string
             case "zap2it_id":
                 zap2itId += string

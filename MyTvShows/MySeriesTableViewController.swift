@@ -93,7 +93,7 @@ class MySeriesTableViewController: UITableViewController {
             searchController.delegate = self
         } else if segue.identifier == "SerieInfo" {
             let serie = sender as! Serie
-            let controller = segue.destinationViewController as! SeriesInfoViewController
+            let controller = segue.destinationViewController as! SerieInfoTableViewController
             controller.serie = serie
         }
     }
