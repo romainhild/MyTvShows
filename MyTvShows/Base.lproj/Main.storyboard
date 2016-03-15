@@ -80,7 +80,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Search new Series" id="9wC-7d-QyE">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="965-bw-6fS"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="965-bw-6fS">
+                            <connections>
+                                <action selector="cancel:" destination="BYZ-38-t0r" id="uGd-4G-f56"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="4KL-62-cMw" id="KEo-Xg-QYd"/>
@@ -96,7 +100,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="84I-bO-DaD" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zaS-HL-uGB">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="zaS-HL-uGB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -114,7 +118,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qLV-MH-5Zm" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9ZO-z1-MWT">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="9ZO-z1-MWT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

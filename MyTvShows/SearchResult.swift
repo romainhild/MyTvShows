@@ -9,7 +9,7 @@
 import Foundation
 
 class SearchResult {
-    var id = 0
+    var id = ""
     var name = ""
     var lang = ""
 }

@@ -10,16 +10,20 @@ import UIKit
 
 class MySeriesTableViewController: UITableViewController {
     
-    var mySeries = [Serie]()
+    var mySeries = MySeries()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mySeries.delegate = self
 
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
         tableView.rowHeight = tableView.bounds.size.width*140/758
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        mySeries.append(Serie(id: "161511"))
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,9 +42,8 @@ class MySeriesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SerieBannerCell", forIndexPath: indexPath)
-
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCellWithIdentifier("SerieBannerCell", forIndexPath: indexPath) as! SerieBannerTableViewCell
+        cell.configureForSerie(mySeries[indexPath.row])
 
         return cell
     }
@@ -53,17 +56,17 @@ class MySeriesTableViewController: UITableViewController {
     }
     */
 
-    /*
+
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
+            mySeries.remove(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
+//        } else if editingStyle == .Insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }    
     }
-    */
 
     /*
     // Override to support rearranging the table view.
@@ -93,8 +96,21 @@ class MySeriesTableViewController: UITableViewController {
 }
 
 extension MySeriesTableViewController: SearchViewControllerDelegate {
+    func searchViewControllerDidCancel(controller: SearchViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func searchViewController(controller: SearchViewController, addSerie serie: Serie) {
         mySeries.append(serie)
         tableView.reloadData()
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension MySeriesTableViewController: MySeriesDelegate {
+    func mySeriesNeedRefresh(myseries: MySeries) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
     }
 }

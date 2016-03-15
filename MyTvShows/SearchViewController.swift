@@ -24,6 +24,10 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    @IBAction func cancel(sender: AnyObject) {
+        delegate?.searchViewControllerDidCancel(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // put the content of the tableview below the searchbar
@@ -37,14 +41,9 @@ class SearchViewController: UIViewController {
     }
 
     func urlWithSearchText(searchText: String) -> NSURL {
-        let escapedSearchText = searchText.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        var languageQuery = ""
-        if !language.isEmpty {
-            languageQuery = "&language=\(language)"
-        }
-        let urlString = String(format: "https://thetvdb.com/api/GetSeries.php?seriesname=%@%@", escapedSearchText, languageQuery)
-        let url = NSURL(string: urlString)
-        return url!
+        let tvDBApi = TvDBApiSingleton.sharedInstance
+        let url = tvDBApi.urlForSearch(searchText)
+        return url
     }
     
     func parseXML(data: NSData) -> Bool {
@@ -79,7 +78,7 @@ extension SearchViewController: UISearchBarDelegate {
                 if let error = error where error.code == -999 {
                     return
                 } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                    print("Success! \(data!)")
+                    //print("Success! \(data!)")
                     if self.parseXML(data!) {
                         self.searchResults.sortInPlace(<)
                     
@@ -174,7 +173,7 @@ extension SearchViewController: NSXMLParserDelegate {
         if string != "\n" {
             switch currentElementParsed {
             case "seriesid":
-                searchResults.last!.id = Int(string)!
+                searchResults.last!.id = string
             case "SeriesName":
                 searchResults.last!.name += string
             case "language":
@@ -187,5 +186,6 @@ extension SearchViewController: NSXMLParserDelegate {
 }
 
 protocol SearchViewControllerDelegate: class {
+    func searchViewControllerDidCancel(controller: SearchViewController)
     func searchViewController(controller: SearchViewController, addSerie serie: Serie)
 }
