@@ -55,7 +55,7 @@ class Serie : NSObject {
     var fanart = ""
     var lastupdatedAsString = ""
     var lastupdated: NSDate?
-    var posters = ""
+    var poster = ""
     var zap2itId = ""
     
     var currentElementParsed = ""
@@ -180,8 +180,8 @@ extension Serie: NSXMLParserDelegate {
                 fanart += string
             case "lastupdated":
                 lastupdatedAsString += string
-            case "posters":
-                posters += string
+            case "poster":
+                poster += string
             case "zap2it_id":
                 zap2itId += string
             default:
