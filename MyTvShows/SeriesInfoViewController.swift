@@ -11,11 +11,25 @@ import UIKit
 class SeriesInfoViewController: UIViewController {
     
     var serie: Serie!
+    
+    var downloadTask: NSURLSessionDownloadTask?
 
+    @IBOutlet weak var posterView: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.title = serie.seriesName
+        
+        if !serie.poster.isEmpty {
+            let tvDBApi = TvDBApiSingleton.sharedInstance
+            let url = tvDBApi.urlForBanner(serie.poster)
+            downloadTask = posterView.loadImageWithURL(url)
+        }
+        
+        tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0,
+            right: 0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,4 +48,15 @@ class SeriesInfoViewController: UIViewController {
     }
     */
 
+}
+
+extension SeriesInfoViewController: UITableViewDataSource {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 19
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("TestCell", forIndexPath: indexPath)
+        return cell
+    }
 }
