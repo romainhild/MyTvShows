@@ -9,17 +9,20 @@
 import UIKit
 
 extension UIImageView {
-    func loadImageWithURL(url: NSURL) -> NSURLSessionDownloadTask {
+    func loadImageWithURL(url: NSURL, delegate: UIImageViewDownloaderDelegate? = nil) -> NSURLSessionDownloadTask {
         let session = NSURLSession.sharedSession()
         
         let downloadTask = session.downloadTaskWithURL(url) {
-            [weak self] url, response, error in
+            [weak self, weak delegate] url, response, error in
             if let error = error where error.code == -999 {
                 return
             } else if error == nil, let url = url, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
                 dispatch_async(dispatch_get_main_queue()) {
                     if let strongSelf = self {
                         strongSelf.image = image
+                        if let delegate = delegate {
+                            delegate.imageViewDidFinishDownloading(strongSelf)
+                        }
                     }
                 }
             } else {
@@ -30,4 +33,8 @@ extension UIImageView {
         downloadTask.resume()
         return downloadTask
     }
+}
+
+protocol UIImageViewDownloaderDelegate: class {
+    func imageViewDidFinishDownloading(imageView: UIImageView)
 }

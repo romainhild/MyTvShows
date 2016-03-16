@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		902646411C9A17A200E2537A /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902646401C9A17A200E2537A /* UIImageColors.swift */; };
 		902705CA1C97502700755ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705C91C97502700755ADC /* AppDelegate.swift */; };
 		902705CC1C97502700755ADC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705CB1C97502700755ADC /* SearchViewController.swift */; };
 		902705CF1C97502700755ADC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902705CD1C97502700755ADC /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		902646401C9A17A200E2537A /* UIImageColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageColors.swift; path = ../UIImageColors.swift; sourceTree = "<group>"; };
 		902705C61C97502600755ADC /* MyTvShows.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTvShows.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		902705C91C97502700755ADC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		902705CB1C97502700755ADC /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */,
 				902705E11C976FD500755ADC /* SerieBannerCell.xib */,
 				902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */,
+				902646401C9A17A200E2537A /* UIImageColors.swift */,
 				902705E31C97716C00755ADC /* SerieBannerTableViewCell.swift */,
 				902705DF1C976DC900755ADC /* Serie.swift */,
 				902705E91C984F7C00755ADC /* MySeries.swift */,
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				902705DE1C97687100755ADC /* MySeriesTableViewController.swift in Sources */,
+				902646411C9A17A200E2537A /* UIImageColors.swift in Sources */,
 				902705E61C981FE400755ADC /* UIImageView + DownloadImage.swift in Sources */,
 				902705CC1C97502700755ADC /* SearchViewController.swift in Sources */,
 				902705DC1C97583800755ADC /* SearchResult.swift in Sources */,
@@ -321,6 +325,7 @@
 				902705DA1C97502700755ADC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
