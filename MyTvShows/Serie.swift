@@ -31,7 +31,7 @@ class Serie : NSObject {
     var delegate: SerieDelegate?
     
     var seriesid: String
-    var episodes = [Episode]()
+    var seasons = [Season]()
     
     var actors = [String]()
     var airsDayOfWeek = ""
@@ -55,6 +55,7 @@ class Serie : NSObject {
     var poster = ""
     var zap2itId = ""
     
+    var indexOfSeasons = [NSIndexPath]()
     var indexOfOverview: NSIndexPath?
     var indexOfRatings: NSIndexPath?
     var indexOfGenre = [NSIndexPath]()
@@ -86,6 +87,7 @@ class Serie : NSObject {
                 return
             } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                 if self.parseXMLData(data!) {
+                    self.seasons.sortInPlace(<)
                     self.initIndexes()
                     self.delegate?.serieFinishedInit(self)
                 } else {
@@ -102,6 +104,12 @@ class Serie : NSObject {
     
     func initIndexes() {
         var rows = 0
+        if !seasons.isEmpty {
+            for _ in seasons {
+                indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: 0))
+                rows++
+            }
+        }
         if !overview.isEmpty {
             indexOfOverview = NSIndexPath(forRow: rows, inSection: 0)
             rows++
@@ -141,6 +149,10 @@ class Serie : NSObject {
             rows++
         }
         numberOfRows = rows
+    }
+    
+    func indexOfSeasonWithId(id: String) -> Int? {
+        return seasons.indexOf { $0.seasonId == id }
     }
 }
 
@@ -202,7 +214,14 @@ extension Serie: NSXMLParserDelegate {
             case "seriesid":
                 episode.serieId = currentCharactersParsed
             case "Episode":
-                episodes.append(episode)
+                if let number = indexOfSeasonWithId(episode.seasonId) {
+                    seasons[number].append(episode)
+                }
+                else {
+                    let season = Season(id: episode.seasonId, number: episode.epSeason)
+                    season.append(episode)
+                    seasons.append(season)
+                }
                 currentEpisodeParsed = nil
             default:
                 break

@@ -28,4 +28,8 @@ class Episode: NSObject {
     var serieId = ""
     var epFilename = ""
     
+    func isFromSeason(season: Int) -> Bool {
+        return epSeason == season
+    }
+    
 }
