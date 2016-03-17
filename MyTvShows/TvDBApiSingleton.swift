@@ -27,7 +27,7 @@ class TvDBApiSingleton {
     private init() {}
     
     func urlForSerieId(id: String) -> NSURL {
-        return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)\(language)")!
+        return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)/all\(language)")!
     }
     
     func urlForSearch(searchText: String) -> NSURL {

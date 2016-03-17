@@ -10,8 +10,6 @@ import Foundation
 
 class Serie : NSObject {
     
-    var delegate: SerieDelegate?
-    
     static let firstAiredFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -30,36 +28,29 @@ class Serie : NSObject {
         return formatter
     }()
     
-    var seriesid: String
+    var delegate: SerieDelegate?
     
-    var actorsAsString = ""
+    var seriesid: String
+    var episodes = [Episode]()
+    
     var actors = [String]()
     var airsDayOfWeek = ""
     var airsTime = ""
-    var contentRating = ""
-    var firstAiredAsString = ""
     var firstAired: NSDate?
-    var genreAsString = ""
     var genre = [String]()
     var imdbId = ""
     var language = ""
     var network = ""
     var overview = ""
-    var ratingAsString = ""
     var rating = -1.0
-    var ratingCountAsString = ""
     var ratingCount = -1
-    var runtimeAsString = ""
     var runtime = -1
     var seriesName = ""
     var status = ""
-    var addedAsString = ""
     var added: NSDate?
-    var addedByAsString = ""
     var addedBy = -1
     var banner = ""
     var fanart = ""
-    var lastupdatedAsString = ""
     var lastupdated: NSDate?
     var poster = ""
     var zap2itId = ""
@@ -161,95 +152,125 @@ extension Serie: NSXMLParserDelegate {
     }
     
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        currentElementParsed = elementName
+        currentCharactersParsed = ""
+        if elementName == "Episode" {
+            currentEpisodeParsed = Episode()
+        }
     }
     
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        switch elementName {
-        case "Actors":
-            actors = actorsAsString.componentsSeparatedByString("|").filter { !$0.isEmpty }
-        case "FirstAired":
-            firstAired = Serie.firstAiredFormatter.dateFromString(firstAiredAsString)
-        case "Genre":
-            genre = genreAsString.componentsSeparatedByString("|").filter { !$0.isEmpty }
-        case "Rating":
-            if !ratingAsString.isEmpty, let rating = Double(ratingAsString) {
-                self.rating = rating
+        if let episode = currentEpisodeParsed { // Episode
+            switch elementName {
+            case "id":
+                episode.epId = currentCharactersParsed
+            case "Director":
+                episode.epDirector = currentCharactersParsed
+            case "EpisodeName":
+                episode.epName = currentCharactersParsed
+            case "EpisodeNumber":
+                if let number = Int(currentCharactersParsed) {
+                    episode.epNumber = number
+                }
+            case "FirstAired":
+                episode.epFirstAired = Serie.firstAiredFormatter.dateFromString(currentCharactersParsed)
+            case "IMDB_ID":
+                episode.epImdbId = currentCharactersParsed
+            case "Language":
+                episode.epLanguage = currentCharactersParsed
+            case "Overview":
+                episode.epOverview = currentCharactersParsed
+            case "Rating":
+                if let rating = Double(currentCharactersParsed) {
+                    episode.epRating = rating
+                }
+            case "RatingCount":
+                if let ratingCount = Int(currentCharactersParsed) {
+                    episode.epRatingCount = ratingCount
+                }
+            case "SeasonNumber":
+                if let number = Int(currentCharactersParsed) {
+                    episode.epSeason = number
+                }
+            case "filename":
+                episode.epFilename = currentCharactersParsed
+            case "lastupdated":
+                if let interval = Double(currentCharactersParsed) {
+                    episode.epLastUpdated = NSDate(timeIntervalSince1970: interval)
+                }
+            case "seasonid":
+                episode.seasonId = currentCharactersParsed
+            case "seriesid":
+                episode.serieId = currentCharactersParsed
+            case "Episode":
+                episodes.append(episode)
+                currentEpisodeParsed = nil
+            default:
+                break
             }
-        case "RatingCount":
-            if !ratingCountAsString.isEmpty, let ratingCount = Int(ratingCountAsString) {
-                self.ratingCount = ratingCount
-            }
-        case "Runtime":
-            if !runtimeAsString.isEmpty, let runtime = Int(runtimeAsString) {
-                self.runtime = runtime
-            }
-        case "added":
-            added = Serie.addedFormatter.dateFromString(addedAsString)
-        case "addedBy":
-            if !addedByAsString.isEmpty, let addedBy = Int(addedByAsString) {
-                self.addedBy = addedBy
-            }
-        case "lastupdated":
-            if let interval = Double(lastupdatedAsString) {
-                lastupdated = NSDate(timeIntervalSince1970: interval)
-            }
-        default:
-            break
         }
-        currentElementParsed = ""
+        else { // Serie
+            switch elementName {
+            case "Actors":
+                actors = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
+            case "Airs_DayOfWeek":
+                airsDayOfWeek = currentCharactersParsed
+            case "Airs_Time":
+                airsTime = currentCharactersParsed
+            case "FirstAired":
+                firstAired = Serie.firstAiredFormatter.dateFromString(currentCharactersParsed)
+            case "Genre":
+                genre = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
+            case "IMDB_ID":
+                imdbId = currentCharactersParsed
+            case "Language":
+                language = currentCharactersParsed
+            case "Network":
+                network = currentCharactersParsed
+            case "Overview":
+                overview = currentCharactersParsed
+            case "Rating":
+                if let rating = Double(currentCharactersParsed) {
+                    self.rating = rating
+                }
+            case "RatingCount":
+                if let ratingCount = Int(currentCharactersParsed) {
+                    self.ratingCount = ratingCount
+                }
+            case "Runtime":
+                if  let runtime = Int(currentCharactersParsed) {
+                    self.runtime = runtime
+                }
+            case "SeriesName":
+                seriesName = currentCharactersParsed
+            case "Status":
+                status = currentCharactersParsed
+            case "added":
+                added = Serie.addedFormatter.dateFromString(currentCharactersParsed)
+            case "addedBy":
+                if  let addedBy = Int(currentCharactersParsed) {
+                    self.addedBy = addedBy
+                }
+            case "banner":
+                banner = currentCharactersParsed
+            case "fanart":
+                fanart = currentCharactersParsed
+            case "lastupdated":
+                if let interval = Double(currentCharactersParsed) {
+                    lastupdated = NSDate(timeIntervalSince1970: interval)
+                }
+            case "poster":
+                poster = currentCharactersParsed
+            case "zap2it_id":
+                zap2itId = currentCharactersParsed
+            default:
+                break
+            }
+        }
     }
     
     func parser(parser: NSXMLParser, foundCharacters string: String) {
         if string != "\n" {
-            switch currentElementParsed {
-            case "Actors":
-                actorsAsString += string
-            case "Airs_DayOfWeek":
-                airsDayOfWeek += string
-            case "Airs_Time":
-                airsTime += string
-            case "ContentRating":
-                contentRating += string
-            case "FirstAired":
-                firstAiredAsString += string
-            case "Genre":
-                genreAsString += string
-            case "IMDB_ID":
-                imdbId += string
-            case "Language":
-                language += string
-            case "Network":
-                network += string
-            case "Overview":
-                overview += string
-            case "Rating":
-                ratingAsString += string
-            case "RatingCount":
-                ratingCountAsString += string
-            case "Runtime":
-                runtimeAsString += string
-            case "SeriesName":
-                seriesName += string
-            case "Status":
-                status += string
-            case "added":
-                addedAsString += string
-            case "addedBy":
-                addedByAsString += string
-            case "banner":
-                banner += string
-            case "fanart":
-                fanart += string
-            case "lastupdated":
-                lastupdatedAsString += string
-            case "poster":
-                poster += string
-            case "zap2it_id":
-                zap2itId += string
-            default:
-                break
-            }
+            currentCharactersParsed += string
         }
     }
 }
@@ -261,3 +282,4 @@ protocol SerieDelegate: class {
 func < (lhs: Serie, rhs: Serie) -> Bool {
     return lhs.seriesName.localizedStandardCompare(rhs.seriesName) == .OrderedAscending
 }
+
