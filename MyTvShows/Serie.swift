@@ -55,6 +55,8 @@ class Serie : NSObject {
     var poster = ""
     var zap2itId = ""
     
+    var posterColors: UIImageColors?
+    
     var numberOfSeasons: Int {
         return seasons.count
     }

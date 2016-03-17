@@ -14,7 +14,6 @@ class SeriesInfoViewController: UIViewController {
     var serie: Serie!
     
     var downloadTask: NSURLSessionDownloadTask?
-    var colors: UIImageColors?
     
     @IBOutlet weak var posterView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
@@ -40,15 +39,17 @@ class SeriesInfoViewController: UIViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "SeasonSegue" {
+            let controller = segue.destinationViewController as! EpisodesTableViewController
+            let season = sender as! Season
+            controller.season = season
+            controller.colors = serie.posterColors
+        }
     }
-    */
 
 }
 
@@ -61,28 +62,28 @@ extension SeriesInfoViewController: UITableViewDataSource {
         switch indexPath {
         case let val where val == serie.indexOfOverview:
             let cell = tableView.dequeueReusableCellWithIdentifier("OverviewCell", forIndexPath: indexPath)
+            cell.backgroundColor = serie.posterColors?.backgroundColor
+
             let overviewLabel = cell.viewWithTag(1) as! UILabel
             overviewLabel.text = serie.overview
-            if let colors = colors {
-                cell.backgroundColor = colors.backgroundColor
-                overviewLabel.textColor = colors.primaryColor
-            }
+            overviewLabel.textColor = serie.posterColors?.primaryColor
+            
             return cell
         case let val where val == serie.indexOfRatings:
             let cell = tableView.dequeueReusableCellWithIdentifier("RatingCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             let titleLabel = cell.viewWithTag(1) as! UILabel
-            titleLabel.textColor = colors?.detailColor
+            titleLabel.textColor = serie.posterColors?.detailColor
 
             let ratingLabel = cell.viewWithTag(2) as! UILabel
             ratingLabel.text = String(serie.rating)
-            ratingLabel.textColor = colors?.primaryColor
+            ratingLabel.textColor = serie.posterColors?.primaryColor
 
             let ratingCountLabel = cell.viewWithTag(3) as! UILabel
             if serie.ratingCount != -1 {
                 ratingCountLabel.text = "\(serie.ratingCount) ratings"
-                ratingCountLabel.textColor = colors?.secondaryColor
+                ratingCountLabel.textColor = serie.posterColors?.secondaryColor
             }
             else {
                 ratingCountLabel.text = ""
@@ -90,7 +91,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             return cell
         case let val where serie.indexOfGenre.contains(val):
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             let i = serie.indexOfGenre.indexOf(val)!
             if i == 0 {
@@ -99,89 +100,89 @@ extension SeriesInfoViewController: UITableViewDataSource {
             else {
                 cell.textLabel?.text = ""
             }
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.genre[i]
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where val == serie.indexOfFirstAired:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "First Aired:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = Serie.firstAiredStringFormatter.stringFromDate(serie.firstAired!)
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where val == serie.indexOfStatus:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "Status:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.status
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
 
             return cell
         case let val where val == serie.indexOfAirDay:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "Air Day:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.airsDayOfWeek
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where val == serie.indexOfAirTime:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "Air Time:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.airsTime
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where val == serie.indexOfNetwork:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "Network:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.network
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where val == serie.indexOfRuntime:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             cell.textLabel?.text = "Runtime:"
-            cell.textLabel?.textColor = colors?.detailColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             
             cell.detailTextLabel?.text = serie.runtime.minutesAsTime()
-            cell.detailTextLabel?.textColor = colors?.primaryColor
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
         case let val where serie.indexOfSeasons.contains(val):
             let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             
             let i = serie.indexOfSeasons.indexOf(val)!
             cell.textLabel?.text = "Season \(serie.seasons[i].seasonNumber)"
-            cell.textLabel?.textColor = colors?.primaryColor
+            cell.textLabel?.textColor = serie.posterColors?.primaryColor
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
-            cell.backgroundColor = colors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             cell.textLabel?.text = ""
             cell.detailTextLabel?.text = ""
             return cell
@@ -205,12 +206,29 @@ extension SeriesInfoViewController: UITableViewDelegate {
             return 44
         }
     }
+    
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if serie.indexOfSeasons.contains(indexPath) {
+            return indexPath
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if serie.indexOfSeasons.contains(indexPath) {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            let i = serie.indexOfSeasons.indexOf(indexPath)!
+            performSegueWithIdentifier("SeasonSegue", sender: serie.seasons[i])
+        }
+    }
 }
 
 extension SeriesInfoViewController: UIImageViewDownloaderDelegate {
     func imageViewDidFinishDownloading(imageView: UIImageView) {
-        colors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
-        view.backgroundColor = colors?.backgroundColor
+        serie.posterColors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
+        view.backgroundColor = serie.posterColors?.backgroundColor
         tableView.reloadData()
     }
 }

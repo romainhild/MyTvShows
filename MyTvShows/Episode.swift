@@ -9,6 +9,13 @@
 import Foundation
 
 class Episode: NSObject {
+    
+    static let firstAiredStringFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle
+        return formatter
+    }()
+    
     var epId = ""
     var epNumber = -1
     var epSeason = -1

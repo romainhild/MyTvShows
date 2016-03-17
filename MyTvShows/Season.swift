@@ -11,6 +11,9 @@ import Foundation
 class Season: NSObject {
     var seasonId = ""
     var seasonNumber = -1
+    var count: Int {
+        return episodes.count
+    }
     
     var episodes = [Episode]()
     
