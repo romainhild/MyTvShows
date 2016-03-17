@@ -54,11 +54,12 @@ class SeriesInfoViewController: UIViewController {
 
 extension SeriesInfoViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return serie.numberOfRows
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && indexPath.row == 0 {
+        switch indexPath {
+        case let val where val == serie.indexOfOverview:
             let cell = tableView.dequeueReusableCellWithIdentifier("OverviewCell", forIndexPath: indexPath)
             let overviewLabel = cell.viewWithTag(1) as! UILabel
             overviewLabel.text = serie.overview
@@ -67,9 +68,112 @@ extension SeriesInfoViewController: UITableViewDataSource {
                 overviewLabel.textColor = colors.primaryColor
             }
             return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("TestCell", forIndexPath: indexPath)
+        case let val where val == serie.indexOfRatings:
+            let cell = tableView.dequeueReusableCellWithIdentifier("RatingCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            let titleLabel = cell.viewWithTag(1) as! UILabel
+            titleLabel.textColor = colors?.detailColor
+
+            let ratingLabel = cell.viewWithTag(2) as! UILabel
+            ratingLabel.text = String(serie.rating)
+            ratingLabel.textColor = colors?.primaryColor
+
+            let ratingCountLabel = cell.viewWithTag(3) as! UILabel
+            if serie.ratingCount != -1 {
+                ratingCountLabel.text = "\(serie.ratingCount) ratings"
+                ratingCountLabel.textColor = colors?.secondaryColor
+            }
+            else {
+                ratingCountLabel.text = ""
+            }
+            return cell
+        case let val where serie.indexOfGenre.contains(val):
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            let i = serie.indexOfGenre.indexOf(val)!
+            if i == 0 {
+                cell.textLabel?.text = "Genre:"
+            }
+            else {
+                cell.textLabel?.text = ""
+            }
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.genre[i]
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        case let val where val == serie.indexOfFirstAired:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "First Aired:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = Serie.firstAiredStringFormatter.stringFromDate(serie.firstAired!)
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        case let val where val == serie.indexOfStatus:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "Status:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.status
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+
+            return cell
+        case let val where val == serie.indexOfAirDay:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "Air Day:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.airsDayOfWeek
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        case let val where val == serie.indexOfAirTime:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "Air Time:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.airsTime
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        case let val where val == serie.indexOfNetwork:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "Network:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.network
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        case let val where val == serie.indexOfRuntime:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            cell.textLabel?.text = "Runtime:"
+            cell.textLabel?.textColor = colors?.detailColor
+            
+            cell.detailTextLabel?.text = serie.runtime.minutesAsTime()
+            cell.detailTextLabel?.textColor = colors?.primaryColor
+            
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
             return cell
         }
     }

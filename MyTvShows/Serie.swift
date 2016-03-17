@@ -18,6 +18,12 @@ class Serie : NSObject {
         return formatter
     }()
     
+    static let firstAiredStringFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle
+        return formatter
+    }()
+    
     static let addedFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -58,7 +64,20 @@ class Serie : NSObject {
     var poster = ""
     var zap2itId = ""
     
-    var currentElementParsed = ""
+    var indexOfOverview: NSIndexPath?
+    var indexOfRatings: NSIndexPath?
+    var indexOfGenre = [NSIndexPath]()
+    var indexOfFirstAired: NSIndexPath?
+    var indexOfStatus: NSIndexPath?
+    var indexOfAirDay: NSIndexPath?
+    var indexOfAirTime: NSIndexPath?
+    var indexOfNetwork: NSIndexPath?
+    var indexOfRuntime: NSIndexPath?
+    var numberOfRows = 0
+    
+    var currentCharactersParsed = ""
+    var currentEpisodeParsed: Episode?
+    
     var error = false
     
     init( id: String) {
@@ -76,6 +95,7 @@ class Serie : NSObject {
                 return
             } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                 if self.parseXMLData(data!) {
+                    self.initIndexes()
                     self.delegate?.serieFinishedInit(self)
                 } else {
                     self.error = true
@@ -87,6 +107,49 @@ class Serie : NSObject {
             }
         }
         dataTask.resume()
+    }
+    
+    func initIndexes() {
+        var rows = 0
+        if !overview.isEmpty {
+            indexOfOverview = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if rating != -1 {
+            indexOfRatings = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if !genre.isEmpty {
+            for _ in genre {
+                indexOfGenre.append(NSIndexPath(forRow: rows, inSection: 0))
+                rows++
+            }
+        }
+        if let _ = firstAired {
+            indexOfFirstAired = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if !status.isEmpty {
+            indexOfStatus = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if !airsDayOfWeek.isEmpty {
+            indexOfAirDay = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if !airsTime.isEmpty {
+            indexOfAirTime = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if !network.isEmpty {
+            indexOfNetwork = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        if runtime != -1 {
+            indexOfRuntime = NSIndexPath(forRow: rows, inSection: 0)
+            rows++
+        }
+        numberOfRows = rows
     }
 }
 
