@@ -171,9 +171,19 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = colors?.primaryColor
             
             return cell
+        case let val where serie.indexOfSeasons.contains(val):
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
+            cell.backgroundColor = colors?.backgroundColor
+            
+            let i = serie.indexOfSeasons.indexOf(val)!
+            cell.textLabel?.text = "Season \(serie.seasons[i].seasonNumber)"
+            cell.textLabel?.textColor = colors?.primaryColor
+            return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = colors?.backgroundColor
+            cell.textLabel?.text = ""
+            cell.detailTextLabel?.text = ""
             return cell
         }
     }
@@ -181,7 +191,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
 
 extension SeriesInfoViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 && indexPath.row == 0 {
+        if indexPath == serie.indexOfOverview {
             return UITableViewAutomaticDimension
         } else {
             return 44
@@ -189,7 +199,7 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 && indexPath.row == 0 {
+        if indexPath == serie.indexOfOverview {
             return 160
         } else {
             return 44

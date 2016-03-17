@@ -55,6 +55,10 @@ class Serie : NSObject {
     var poster = ""
     var zap2itId = ""
     
+    var numberOfSeasons: Int {
+        return seasons.count
+    }
+    
     var indexOfSeasons = [NSIndexPath]()
     var indexOfOverview: NSIndexPath?
     var indexOfRatings: NSIndexPath?
