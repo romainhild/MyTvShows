@@ -40,15 +40,14 @@ class SeriesInfoViewController: UIViewController {
 
         self.title = serie.seriesName
         
-        if let url = serie.posterLocalURL, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+        if let path = serie.posterLocalURL, url = localFilePathForUrl(path.absoluteString), data = NSData(contentsOfURL: url), image = UIImage(data: data) {
             posterView.image = image
             if serie.posterColors == nil {
                 serie.posterColors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
             }
             view.backgroundColor = serie.posterColors?.backgroundColor
-            initIndexes()
         }
-        
+        initIndexes()        
         tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0,
             right: 0)
         tableView.reloadData()

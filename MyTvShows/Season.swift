@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Season: NSObject {
+class Season: NSObject, NSCoding {
     var seasonId = ""
     var seasonNumber = -1
     var count: Int {
@@ -18,8 +18,23 @@ class Season: NSObject {
     var episodes = [Episode]()
     
     init(id: String, number: Int) {
+        super.init()
+
         seasonId = id
         seasonNumber = number
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init()
+        seasonId = aDecoder.decodeObjectForKey("seasonId") as! String
+        seasonNumber = aDecoder.decodeObjectForKey("seasonNumber") as! Int
+        episodes = aDecoder.decodeObjectForKey("episodes") as! [Episode]
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(seasonId, forKey: "seasonId")
+        aCoder.encodeObject(seasonNumber, forKey: "seasonNumber")
+        aCoder.encodeObject(episodes, forKey: "episodes")
     }
     
     subscript(index: Int) -> Episode {

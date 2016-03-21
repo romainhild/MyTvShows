@@ -30,7 +30,7 @@ class SerieBannerTableViewCell: UITableViewCell {
     
     func configureForSerie(serie: Serie) {
         bannerImageView.image = UIImage()
-        if let url = serie.bannerLocalURL, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+        if let path = serie.bannerLocalURL, url = localFilePathForUrl(path.absoluteString), data = NSData(contentsOfURL: url), image = UIImage(data: data) {
             bannerImageView.image = image
         }
     }

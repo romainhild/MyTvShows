@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Episode: NSObject {
+class Episode: NSObject, NSCoding {
     
     static let firstAiredStringFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -22,12 +22,9 @@ class Episode: NSObject {
     var epName = ""
     var epLanguage = ""
     var epOverview = ""
-    var epFirstAiredAsString = ""
     var epFirstAired: NSDate?
     var epDirector = ""
-    var epRatingAsString = ""
     var epRating = -1.0
-    var epRatingCountAsString = ""
     var epRatingCount = -1
     var epImdbId = ""
     var epLastUpdated: NSDate?
@@ -36,6 +33,47 @@ class Episode: NSObject {
     var epFilename = ""
     
     var currentCharactersParsed = ""
+    
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init()
+        epId = aDecoder.decodeObjectForKey("epId") as! String
+        epNumber = aDecoder.decodeObjectForKey("epNumber") as! Int
+        epSeason = aDecoder.decodeObjectForKey("epSeason") as! Int
+        epName = aDecoder.decodeObjectForKey("epName") as! String
+        epLanguage = aDecoder.decodeObjectForKey("epLanguage") as! String
+        epOverview = aDecoder.decodeObjectForKey("epOverview") as! String
+        epFirstAired = aDecoder.decodeObjectForKey("epFirstAired") as! NSDate?
+        epDirector = aDecoder.decodeObjectForKey("epDirector") as! String
+        epRating = aDecoder.decodeObjectForKey("epRating") as! Double
+        epRatingCount = aDecoder.decodeObjectForKey("epRatingCount") as! Int
+        epImdbId = aDecoder.decodeObjectForKey("epImdbId") as! String
+        epLastUpdated = aDecoder.decodeObjectForKey("epLastUpdated") as! NSDate?
+        seasonId = aDecoder.decodeObjectForKey("seasonId") as! String
+        serieId = aDecoder.decodeObjectForKey("serieId") as! String
+        epFilename = aDecoder.decodeObjectForKey("epFilename") as! String
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(epId, forKey: "epId")
+        aCoder.encodeObject(epNumber, forKey: "epNumber")
+        aCoder.encodeObject(epSeason, forKey: "epSeason")
+        aCoder.encodeObject(epName, forKey: "epName")
+        aCoder.encodeObject(epLanguage, forKey: "epLanguage")
+        aCoder.encodeObject(epOverview, forKey: "epOverview")
+        aCoder.encodeObject(epFirstAired, forKey: "epFirstAired")
+        aCoder.encodeObject(epDirector, forKey: "epDirector")
+        aCoder.encodeObject(epRating, forKey: "epRating")
+        aCoder.encodeObject(epRatingCount, forKey: "epRatingCount")
+        aCoder.encodeObject(epImdbId, forKey: "epImdbId")
+        aCoder.encodeObject(epLastUpdated, forKey: "epLastUpdated")
+        aCoder.encodeObject(seasonId, forKey: "seasonId")
+        aCoder.encodeObject(serieId, forKey: "serieId")
+        aCoder.encodeObject(epFilename, forKey: "epFilename")
+    }
     
     func update() {
         let tvDBApi = TvDBApiSingleton.sharedInstance

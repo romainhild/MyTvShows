@@ -11,6 +11,16 @@ import UIKit
 class MySeriesTableViewController: UITableViewController {
     
     var mySeries = MySeries()
+    
+    required init?(coder aDecoder: NSCoder) {
+        mySeries = MySeries()
+        super.init(coder: aDecoder)
+        loadSeries()
+        mySeries.delegate = self
+        for serie in mySeries.series {
+            serie.delegateBanner = self
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,14 +34,33 @@ class MySeriesTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        let shameless = Serie(id: "161511")
-        shameless.delageteBanner = self
-        mySeries.append(shameless)
+//        let shameless = Serie(id: "161511")
+//        shameless.delageteBanner = self
+//        mySeries.append(shameless)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func save() {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
+        archiver.encodeObject(mySeries, forKey: "mySeries")
+        archiver.finishEncoding()
+        data.writeToFile(prefPath(), atomically: true)
+    }
+    
+    func loadSeries() {
+        let path = prefPath()
+        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            if let data = NSData(contentsOfFile: path) {
+                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
+                mySeries = unarchiver.decodeObjectForKey("mySeries") as! MySeries
+                unarchiver.finishDecoding()
+            }
+        }
     }
 
     // MARK: - Table view data source
@@ -98,6 +127,7 @@ class MySeriesTableViewController: UITableViewController {
             let serie = sender as! Serie
             let controller = segue.destinationViewController as! SeriesInfoViewController
             controller.serie = serie
+            serie.delegatePoster = controller
         }
     }
     
@@ -122,7 +152,7 @@ extension MySeriesTableViewController: SearchViewControllerDelegate {
     
     func searchViewController(controller: SearchViewController, addSerie serie: Serie) {
         mySeries.append(serie)
-        serie.delageteBanner = self
+        serie.delegateBanner = self
         tableView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
     }

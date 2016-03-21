@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Serie : NSObject {
+class Serie : NSObject, NSCoding {
     
     enum ImageType {
         case Banner
@@ -35,9 +35,9 @@ class Serie : NSObject {
     }()
     
     var delegate: SerieDelegate?
-    var delageteBanner: SerieBannerDelegate?
-    var delagetePoster: SeriePosterDelegate?
-    var delageteFanArt: SerieFanArtDelegate?
+    var delegateBanner: SerieBannerDelegate?
+    var delegatePoster: SeriePosterDelegate?
+    var delegateFanArt: SerieFanArtDelegate?
     
     var seriesid: String
     var seasons = [Season]()
@@ -66,13 +66,13 @@ class Serie : NSObject {
     var poster = ""
     var posterLocalURL: NSURL?
     var zap2itId = ""
+    var nextEpisode: NSDate?
     
     var posterColors: UIImageColors?
     
     var numberOfSeasons: Int {
         return seasons.count
     }
-    var nextEpisode: NSDate?
     
     var currentCharactersParsed = ""
     var currentEpisodeParsed: Episode?
@@ -109,6 +109,70 @@ class Serie : NSObject {
             }
         }
         dataTask.resume()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        seriesid = ""
+        super.init()
+        seriesid = aDecoder.decodeObjectForKey("seriesid") as!  String
+        seasons = aDecoder.decodeObjectForKey("seasons") as!  [Season]
+        
+        actors = aDecoder.decodeObjectForKey("actors") as!  [String]
+        airsDayOfWeek = aDecoder.decodeObjectForKey("airsDayOfWeek") as!  String
+        airsTime = aDecoder.decodeObjectForKey("airsTime") as!  String
+        firstAired = aDecoder.decodeObjectForKey("firstAired") as!  NSDate?
+        genre = aDecoder.decodeObjectForKey("genre") as!  [String]
+        imdbId = aDecoder.decodeObjectForKey("imdbId") as!  String
+        language = aDecoder.decodeObjectForKey("language") as!  String
+        network = aDecoder.decodeObjectForKey("network") as!  String
+        overview = aDecoder.decodeObjectForKey("overview") as!  String
+        rating = aDecoder.decodeObjectForKey("rating") as! Double
+        ratingCount = aDecoder.decodeObjectForKey("ratingCount") as! Int
+        runtime = aDecoder.decodeObjectForKey("runtime") as! Int
+        seriesName = aDecoder.decodeObjectForKey("seriesName") as!  String
+        status = aDecoder.decodeObjectForKey("status") as!  String
+        added = aDecoder.decodeObjectForKey("added") as!  NSDate?
+        addedBy = aDecoder.decodeObjectForKey("addedBy") as! Int
+        banner = aDecoder.decodeObjectForKey("banner") as!  String
+        bannerLocalURL = aDecoder.decodeObjectForKey("bannerLocalURL") as!  NSURL?
+        fanart = aDecoder.decodeObjectForKey("fanart") as!  String
+        fanartLocalURL = aDecoder.decodeObjectForKey("fanartLocalURL") as!  NSURL?
+        lastupdated = aDecoder.decodeObjectForKey("lastupdated") as!  NSDate?
+        poster = aDecoder.decodeObjectForKey("poster") as!  String
+        posterLocalURL = aDecoder.decodeObjectForKey("posterLocalURL") as!  NSURL?
+        zap2itId = aDecoder.decodeObjectForKey("zap2itId") as!  String
+        nextEpisode = aDecoder.decodeObjectForKey("nextEpisode") as!  NSDate?
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(seriesid, forKey: "seriesid")
+        aCoder.encodeObject(seasons, forKey: "seasons")
+        
+        aCoder.encodeObject(actors, forKey: "actors")
+        aCoder.encodeObject(airsDayOfWeek, forKey: "airsDayOfWeek")
+        aCoder.encodeObject(airsTime, forKey: "airsTime")
+        aCoder.encodeObject(firstAired, forKey: "firstAired")
+        aCoder.encodeObject(genre, forKey: "genre")
+        aCoder.encodeObject(imdbId, forKey: "imdbId")
+        aCoder.encodeObject(language, forKey: "language")
+        aCoder.encodeObject(network, forKey: "network")
+        aCoder.encodeObject(overview, forKey: "overview")
+        aCoder.encodeObject(rating, forKey: "rating")
+        aCoder.encodeObject(ratingCount, forKey: "ratingCount")
+        aCoder.encodeObject(runtime, forKey: "runtime")
+        aCoder.encodeObject(seriesName, forKey: "seriesName")
+        aCoder.encodeObject(status, forKey: "status")
+        aCoder.encodeObject(added, forKey: "added")
+        aCoder.encodeObject(addedBy, forKey: "addedBy")
+        aCoder.encodeObject(banner, forKey: "banner")
+        aCoder.encodeObject(bannerLocalURL, forKey: "bannerLocalURL")
+        aCoder.encodeObject(fanart, forKey: "fanart")
+        aCoder.encodeObject(fanartLocalURL, forKey: "fanartLocalURL")
+        aCoder.encodeObject(lastupdated, forKey: "lastupdated")
+        aCoder.encodeObject(poster, forKey: "poster")
+        aCoder.encodeObject(posterLocalURL, forKey: "posterLocalURL")
+        aCoder.encodeObject(zap2itId, forKey: "zap2itId")
+        aCoder.encodeObject(nextEpisode, forKey: "nextEpisode")
     }
     
     func update() {
@@ -189,15 +253,14 @@ class Serie : NSObject {
                 switch type {
                 case .Banner:
                     self?.bannerLocalURL = destinationURL
-                    self?.delageteBanner?.serieFinishedDownloadBanner(self!)
+                    self?.delegateBanner?.serieFinishedDownloadBanner(self!)
                 case .Poster:
                     self?.posterLocalURL = destinationURL
-                    self?.delagetePoster?.serieFinishedDownloadPoster(self!)
+                    self?.delegatePoster?.serieFinishedDownloadPoster(self!)
                 case .FanArt:
                     self?.fanartLocalURL = destinationURL
-                    self?.delageteFanArt?.serieFinishedDownloadFanArt(self!)
+                    self?.delegateFanArt?.serieFinishedDownloadFanArt(self!)
                 }
-                
             }
         }
         

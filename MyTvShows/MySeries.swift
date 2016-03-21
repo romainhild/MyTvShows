@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MySeries: NSObject {
+class MySeries: NSObject, NSCoding {
     var series = [Serie]()
     var delegate: MySeriesDelegate?
     var previousTime = ""
@@ -39,6 +39,20 @@ class MySeries: NSObject {
         }
         
         dataTask.resume()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        series = aDecoder.decodeObjectForKey("series") as! [Serie]
+        previousTime = aDecoder.decodeObjectForKey("previousTime") as! String
+        super.init()
+        for serie in series {
+            serie.delegate = self
+        }
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(series, forKey: "series")
+        aCoder.encodeObject(previousTime, forKey: "previousTime")
     }
     
     subscript(index: Int) -> Serie {
