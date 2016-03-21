@@ -40,3 +40,26 @@ class Episode: NSObject {
     }
     
 }
+
+func < (lhs: Episode, rhs: Episode) -> Bool {
+    if let lhsDate = lhs.epFirstAired {
+        if let rhsDate = rhs.epFirstAired {
+            return lhsDate.compare(rhsDate) == .OrderedAscending
+        }
+        else {
+            return false
+        }
+    }
+    else {
+        return true
+    }
+}
+
+func > (lhs: Episode, rhs: NSDate) -> Bool {
+    if let lhsDate = lhs.epFirstAired {
+        return lhsDate.compare(rhs) == .OrderedDescending
+    }
+    else {
+        return false
+    }
+}

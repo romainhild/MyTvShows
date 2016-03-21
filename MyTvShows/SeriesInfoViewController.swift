@@ -300,8 +300,19 @@ extension SeriesInfoViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
             cell .backgroundColor = serie.posterColors?.backgroundColor
             cell.textLabel?.text = "All Episodes"
-            cell.textLabel?.textColor = serie.posterColors?.primaryColor
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             cell.accessoryType = .None
+            return cell
+        case let val where val == indexOfNextEpisode:
+            let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
+            cell.backgroundColor = serie.posterColors?.backgroundColor
+            
+            cell.textLabel?.text = "Next Episode:"
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
+            
+            cell.detailTextLabel?.text = Episode.firstAiredStringFormatter.stringFromDate(serie.nextEpisode!)
+            cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
+            
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
@@ -344,6 +355,7 @@ extension SeriesInfoViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath == indexOfAllEpisodes {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
             if let _ = selectedIndex {
                 selectedIndex = nil
                 let oldIndexes = indexOfSeasons

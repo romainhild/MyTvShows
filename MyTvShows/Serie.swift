@@ -83,6 +83,7 @@ class Serie : NSObject {
             } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                 if self.parseXMLData(data!) {
                     self.seasons.sortInPlace(<)
+                    self.findNextEpisode()
                     self.delegate?.serieFinishedInit(self)
                 } else {
                     self.error = true
@@ -98,6 +99,18 @@ class Serie : NSObject {
     
     func indexOfSeasonWithId(id: String) -> Int? {
         return seasons.indexOf { $0.seasonId == id }
+    }
+    
+    func findNextEpisode() {
+        let now = NSDate()
+        if let lastSeason = seasons.last {
+            for episode in lastSeason.episodes {
+                if episode > now {
+                    nextEpisode = episode.epFirstAired!
+                    break
+                }
+            }
+        }
     }
 }
 
