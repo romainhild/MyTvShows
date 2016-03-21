@@ -30,8 +30,9 @@ class MySeriesTableViewController: UITableViewController {
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
         tableView.rowHeight = tableView.bounds.size.width*140/758
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.addTarget(mySeries, action: "update", forControlEvents: .ValueChanged)
         
 //        let shameless = Serie(id: "161511")
 //        shameless.delageteBanner = self
