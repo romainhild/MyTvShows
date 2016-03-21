@@ -26,7 +26,6 @@ class MySeriesTableViewController: UITableViewController {
         super.viewDidLoad()
         
         mySeries.delegate = self
-        print(mySeries.previousTime)
 
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
@@ -70,6 +69,20 @@ class MySeriesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if mySeries.count == 0 {
+            let messageLabel = UILabel(frame: tableView.frame)
+            messageLabel.text = "There is no series for now. Please add a serie by tapping the plus button on the top right corner!"
+            messageLabel.textColor = UIColor.blackColor()
+            messageLabel.numberOfLines = 0
+            messageLabel.textAlignment = .Center
+            messageLabel.sizeToFit()
+            tableView.backgroundView = messageLabel
+            tableView.separatorStyle = .None
+        }
+        else {
+            tableView.backgroundView = nil
+            tableView.separatorStyle = .SingleLine
+        }
         return mySeries.count
     }
 
