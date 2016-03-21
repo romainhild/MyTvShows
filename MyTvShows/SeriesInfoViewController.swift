@@ -47,10 +47,13 @@ class SeriesInfoViewController: UIViewController {
             }
             view.backgroundColor = serie.posterColors?.backgroundColor
         }
-        initIndexes()        
-        tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0,
-            right: 0)
+        initIndexes()
         tableView.reloadData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0, right: 0)
+        tableView.setContentOffset(CGPoint(x: 0, y: -posterView.frame.size.height), animated: true)
     }
 
     override func didReceiveMemoryWarning() {
