@@ -60,18 +60,7 @@ class Serie : NSObject {
     var numberOfSeasons: Int {
         return seasons.count
     }
-    
-    var indexOfSeasons = [NSIndexPath]()
-    var indexOfOverview: NSIndexPath?
-    var indexOfRatings: NSIndexPath?
-    var indexOfGenre = [NSIndexPath]()
-    var indexOfFirstAired: NSIndexPath?
-    var indexOfStatus: NSIndexPath?
-    var indexOfAirDay: NSIndexPath?
-    var indexOfAirTime: NSIndexPath?
-    var indexOfNetwork: NSIndexPath?
-    var indexOfRuntime: NSIndexPath?
-    var numberOfRows = 0
+    var nextEpisode: NSDate?
     
     var currentCharactersParsed = ""
     var currentEpisodeParsed: Episode?
@@ -94,7 +83,6 @@ class Serie : NSObject {
             } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                 if self.parseXMLData(data!) {
                     self.seasons.sortInPlace(<)
-                    self.initIndexes()
                     self.delegate?.serieFinishedInit(self)
                 } else {
                     self.error = true
@@ -106,55 +94,6 @@ class Serie : NSObject {
             }
         }
         dataTask.resume()
-    }
-    
-    func initIndexes() {
-        var rows = 0
-        if !seasons.isEmpty {
-            for _ in seasons {
-                indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: 0))
-                rows++
-            }
-        }
-        if !overview.isEmpty {
-            indexOfOverview = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if rating != -1 {
-            indexOfRatings = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if !genre.isEmpty {
-            for _ in genre {
-                indexOfGenre.append(NSIndexPath(forRow: rows, inSection: 0))
-                rows++
-            }
-        }
-        if let _ = firstAired {
-            indexOfFirstAired = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if !status.isEmpty {
-            indexOfStatus = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if !airsDayOfWeek.isEmpty {
-            indexOfAirDay = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if !airsTime.isEmpty {
-            indexOfAirTime = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if !network.isEmpty {
-            indexOfNetwork = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        if runtime != -1 {
-            indexOfRuntime = NSIndexPath(forRow: rows, inSection: 0)
-            rows++
-        }
-        numberOfRows = rows
     }
     
     func indexOfSeasonWithId(id: String) -> Int? {

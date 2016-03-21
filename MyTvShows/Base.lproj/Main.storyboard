@@ -296,7 +296,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BSY-Bs-enr">
                                             <rect key="frame" x="555" y="5" width="30" height="20"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="30" id="urf-A9-RRP"/>
+                                                <constraint firstAttribute="width" priority="999" constant="30" id="urf-A9-RRP"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

@@ -15,6 +15,22 @@ class SeriesInfoViewController: UIViewController {
     
     var downloadTask: NSURLSessionDownloadTask?
     
+    var indexOfOverview: NSIndexPath?
+    var indexOfNextEpisode: NSIndexPath?
+    var indexOfAllEpisodes: NSIndexPath?
+    var indexOfSeasons = [NSIndexPath]()
+    var indexOfRatings: NSIndexPath?
+    var indexOfGenre = [NSIndexPath]()
+    var indexOfFirstAired: NSIndexPath?
+    var indexOfStatus: NSIndexPath?
+    var indexOfAirDay: NSIndexPath?
+    var indexOfAirTime: NSIndexPath?
+    var indexOfNetwork: NSIndexPath?
+    var indexOfRuntime: NSIndexPath?
+    var numberOfRowsInSection = [Int]()
+    
+    var selectedIndex: NSIndexPath?
+
     @IBOutlet weak var posterView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,6 +43,7 @@ class SeriesInfoViewController: UIViewController {
             let tvDBApi = TvDBApiSingleton.sharedInstance
             let url = tvDBApi.urlForBanner(serie.poster)
             downloadTask = posterView.loadImageWithURL(url, delegate: self)
+            initIndexes()
         }
         
         tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0,
@@ -51,16 +68,115 @@ class SeriesInfoViewController: UIViewController {
         }
     }
 
+    func initIndexes() {
+        var section = 0
+        var rows = 0
+
+        if !serie.overview.isEmpty {
+            indexOfOverview = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if rows > 0 {
+            numberOfRowsInSection.append(rows)
+        }
+        section++
+        
+        rows = 0
+        if let _ = serie.nextEpisode {
+            indexOfNextEpisode = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.seasons.isEmpty {
+            indexOfAllEpisodes = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+            if let selectedIndex = selectedIndex where selectedIndex == indexOfAllEpisodes {
+                for _ in serie.seasons {
+                    indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: section))
+                    rows++
+                }
+            }
+        }
+        if rows > 0 {
+            numberOfRowsInSection.append(rows)
+        }
+        section++
+
+        rows = 0
+        if serie.rating != -1 {
+            indexOfRatings = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.genre.isEmpty {
+            for _ in serie.genre {
+                indexOfGenre.append(NSIndexPath(forRow: rows, inSection: section))
+                rows++
+            }
+        }
+        if let _ = serie.firstAired {
+            indexOfFirstAired = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.status.isEmpty {
+            indexOfStatus = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.airsDayOfWeek.isEmpty {
+            indexOfAirDay = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.airsTime.isEmpty {
+            indexOfAirTime = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if !serie.network.isEmpty {
+            indexOfNetwork = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if serie.runtime != -1 {
+            indexOfRuntime = NSIndexPath(forRow: rows, inSection: section)
+            rows++
+        }
+        if rows > 0 {
+            numberOfRowsInSection.append(rows)
+        }
+    }
+    
+    func updateIndexes() {
+        var rows: Int
+        if let _ = indexOfNextEpisode {
+            rows = 2
+        }
+        else {
+            rows = 1
+        }
+        indexOfSeasons = [NSIndexPath]()
+        
+        if let selectedIndex = selectedIndex where selectedIndex == indexOfAllEpisodes {
+            for _ in serie.seasons {
+                indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: indexOfAllEpisodes!.section))
+                rows++
+            }
+            numberOfRowsInSection[indexOfAllEpisodes!.section] += serie.numberOfSeasons
+        }
+        else {
+            numberOfRowsInSection[indexOfAllEpisodes!.section] -= serie.numberOfSeasons
+        }
+        // change index of actors
+    }
 }
 
 extension SeriesInfoViewController: UITableViewDataSource {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return numberOfRowsInSection.count
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return serie.numberOfRows
+        return numberOfRowsInSection[section]
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath {
-        case let val where val == serie.indexOfOverview:
+        case let val where val == indexOfOverview:
             let cell = tableView.dequeueReusableCellWithIdentifier("OverviewCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
 
@@ -69,7 +185,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             overviewLabel.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfRatings:
+        case let val where val == indexOfRatings:
             let cell = tableView.dequeueReusableCellWithIdentifier("RatingCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -89,11 +205,11 @@ extension SeriesInfoViewController: UITableViewDataSource {
                 ratingCountLabel.text = ""
             }
             return cell
-        case let val where serie.indexOfGenre.contains(val):
+        case let val where indexOfGenre.contains(val):
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
-            let i = serie.indexOfGenre.indexOf(val)!
+            let i = indexOfGenre.indexOf(val)!
             if i == 0 {
                 cell.textLabel?.text = "Genre:"
             }
@@ -106,7 +222,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfFirstAired:
+        case let val where val == indexOfFirstAired:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -117,7 +233,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfStatus:
+        case let val where val == indexOfStatus:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -128,7 +244,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
 
             return cell
-        case let val where val == serie.indexOfAirDay:
+        case let val where val == indexOfAirDay:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -139,7 +255,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfAirTime:
+        case let val where val == indexOfAirTime:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -150,7 +266,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfNetwork:
+        case let val where val == indexOfNetwork:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -161,7 +277,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where val == serie.indexOfRuntime:
+        case let val where val == indexOfRuntime:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
@@ -172,13 +288,20 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
             return cell
-        case let val where serie.indexOfSeasons.contains(val):
+        case let val where indexOfSeasons.contains(val):
             let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
             cell.backgroundColor = serie.posterColors?.backgroundColor
             
-            let i = serie.indexOfSeasons.indexOf(val)!
+            let i = indexOfSeasons.indexOf(val)!
             cell.textLabel?.text = "Season \(serie.seasons[i].seasonNumber)"
             cell.textLabel?.textColor = serie.posterColors?.primaryColor
+            return cell
+        case let val where val == indexOfAllEpisodes:
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
+            cell .backgroundColor = serie.posterColors?.backgroundColor
+            cell.textLabel?.text = "All Episodes"
+            cell.textLabel?.textColor = serie.posterColors?.primaryColor
+            cell.accessoryType = .None
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
@@ -192,7 +315,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
 
 extension SeriesInfoViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath == serie.indexOfOverview {
+        if indexPath == indexOfOverview {
             return UITableViewAutomaticDimension
         } else {
             return 44
@@ -200,7 +323,7 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath == serie.indexOfOverview {
+        if indexPath == indexOfOverview {
             return 160
         } else {
             return 44
@@ -208,7 +331,10 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if serie.indexOfSeasons.contains(indexPath) {
+        if indexPath == indexOfAllEpisodes {
+            return indexPath
+        }
+        else if let _ = selectedIndex where indexOfSeasons.contains(indexPath) {
             return indexPath
         }
         else {
@@ -217,9 +343,26 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if serie.indexOfSeasons.contains(indexPath) {
+        if indexPath == indexOfAllEpisodes {
+            if let _ = selectedIndex {
+                selectedIndex = nil
+                let oldIndexes = indexOfSeasons
+                updateIndexes()
+                tableView.beginUpdates()
+                tableView.deleteRowsAtIndexPaths(oldIndexes, withRowAnimation: .Top)
+                tableView.endUpdates()
+            }
+            else {
+                selectedIndex = indexOfAllEpisodes
+                updateIndexes()
+                tableView.beginUpdates()
+                tableView.insertRowsAtIndexPaths(indexOfSeasons, withRowAnimation: .Top)
+                tableView.endUpdates()
+            }
+        }
+        if indexOfSeasons.contains(indexPath) {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            let i = serie.indexOfSeasons.indexOf(indexPath)!
+            let i = indexOfSeasons.indexOf(indexPath)!
             performSegueWithIdentifier("SeasonSegue", sender: serie.seasons[i])
         }
     }
