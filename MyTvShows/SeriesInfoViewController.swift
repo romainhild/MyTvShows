@@ -19,6 +19,7 @@ class SeriesInfoViewController: UIViewController {
     var indexOfNextEpisode: NSIndexPath?
     var indexOfAllEpisodes: NSIndexPath?
     var indexOfSeasons = [NSIndexPath]()
+    var indexOfActors: NSIndexPath?
     var indexOfRatings: NSIndexPath?
     var indexOfGenre = [NSIndexPath]()
     var indexOfFirstAired: NSIndexPath?
@@ -66,6 +67,10 @@ class SeriesInfoViewController: UIViewController {
             controller.season = season
             controller.colors = serie.posterColors
         }
+        else if segue.identifier == "ActorsSegue" {
+            let controller = segue.destinationViewController as! ActorsTableViewController
+            controller.serie = serie
+        }
     }
 
     func initIndexes() {
@@ -95,6 +100,10 @@ class SeriesInfoViewController: UIViewController {
                     rows++
                 }
             }
+        }
+        if !serie.actors.isEmpty {
+            indexOfActors = NSIndexPath(forRow: rows, inSection: section)
+            rows++
         }
         if rows > 0 {
             numberOfRowsInSection.append(rows)
@@ -144,12 +153,16 @@ class SeriesInfoViewController: UIViewController {
     func updateIndexes() {
         var rows: Int
         if let _ = indexOfNextEpisode {
-            rows = 2
-        }
-        else {
             rows = 1
         }
+        else {
+            rows = 0
+        }
         indexOfSeasons = [NSIndexPath]()
+        
+        if let _ = indexOfAllEpisodes {
+            rows++
+        }
         
         if let selectedIndex = selectedIndex where selectedIndex == indexOfAllEpisodes {
             for _ in serie.seasons {
@@ -161,7 +174,10 @@ class SeriesInfoViewController: UIViewController {
         else {
             numberOfRowsInSection[indexOfAllEpisodes!.section] -= serie.numberOfSeasons
         }
-        // change index of actors
+        
+        if let _ = indexOfActors {
+            indexOfActors = NSIndexPath(forRow: rows, inSection: indexOfActors!.section)
+        }
     }
 }
 
@@ -298,7 +314,7 @@ extension SeriesInfoViewController: UITableViewDataSource {
             return cell
         case let val where val == indexOfAllEpisodes:
             let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
-            cell .backgroundColor = serie.posterColors?.backgroundColor
+            cell.backgroundColor = serie.posterColors?.backgroundColor
             cell.textLabel?.text = "All Episodes"
             cell.textLabel?.textColor = serie.posterColors?.detailColor
             cell.accessoryType = .None
@@ -313,6 +329,12 @@ extension SeriesInfoViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = Episode.firstAiredStringFormatter.stringFromDate(serie.nextEpisode!)
             cell.detailTextLabel?.textColor = serie.posterColors?.primaryColor
             
+            return cell
+        case let val where val == indexOfActors:
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeasonCell", forIndexPath: indexPath)
+            cell.backgroundColor = serie.posterColors?.backgroundColor
+            cell.textLabel?.text = "Actors"
+            cell.textLabel?.textColor = serie.posterColors?.detailColor
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("InfoCell", forIndexPath: indexPath)
@@ -342,19 +364,21 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath == indexOfAllEpisodes {
+        switch indexPath {
+        case let val where val == indexOfAllEpisodes:
             return indexPath
-        }
-        else if let _ = selectedIndex where indexOfSeasons.contains(indexPath) {
+        case let val where val == indexOfActors:
             return indexPath
-        }
-        else {
+        case let val where indexOfSeasons.contains(val):
+            return indexPath
+        default:
             return nil
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath == indexOfAllEpisodes {
+        switch indexPath {
+        case let val where val == indexOfAllEpisodes:
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             if let _ = selectedIndex {
                 selectedIndex = nil
@@ -371,11 +395,15 @@ extension SeriesInfoViewController: UITableViewDelegate {
                 tableView.insertRowsAtIndexPaths(indexOfSeasons, withRowAnimation: .Top)
                 tableView.endUpdates()
             }
-        }
-        if indexOfSeasons.contains(indexPath) {
+        case let val where val == indexOfActors:
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            performSegueWithIdentifier("ActorsSegue", sender: nil)
+        case let val where indexOfSeasons.contains(val):
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
             let i = indexOfSeasons.indexOf(indexPath)!
             performSegueWithIdentifier("SeasonSegue", sender: serie.seasons[i])
+        default:
+            break
         }
     }
 }

@@ -10,6 +10,7 @@
 		9005F8F61C9AFCA30091EB5C /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005F8F51C9AFCA30091EB5C /* Episode.swift */; };
 		9005F8F81C9B12670091EB5C /* Season.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005F8F71C9B12670091EB5C /* Season.swift */; };
 		9005F8FA1C9B1D810091EB5C /* EpisodesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005F8F91C9B1D810091EB5C /* EpisodesTableViewController.swift */; };
+		9005F8FC1CA03ADE0091EB5C /* ActorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005F8FB1CA03ADE0091EB5C /* ActorsTableViewController.swift */; };
 		902646411C9A17A200E2537A /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902646401C9A17A200E2537A /* UIImageColors.swift */; };
 		902646431C9AE91D00E2537A /* Int + intToTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902646421C9AE91D00E2537A /* Int + intToTime.swift */; };
 		902705CA1C97502700755ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705C91C97502700755ADC /* AppDelegate.swift */; };
@@ -32,6 +33,7 @@
 		9005F8F51C9AFCA30091EB5C /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		9005F8F71C9B12670091EB5C /* Season.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Season.swift; sourceTree = "<group>"; };
 		9005F8F91C9B1D810091EB5C /* EpisodesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodesTableViewController.swift; sourceTree = "<group>"; };
+		9005F8FB1CA03ADE0091EB5C /* ActorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActorsTableViewController.swift; sourceTree = "<group>"; };
 		902646401C9A17A200E2537A /* UIImageColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageColors.swift; path = ../UIImageColors.swift; sourceTree = "<group>"; };
 		902646421C9AE91D00E2537A /* Int + intToTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int + intToTime.swift"; sourceTree = "<group>"; };
 		902705C61C97502600755ADC /* MyTvShows.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTvShows.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +89,7 @@
 				902705CB1C97502700755ADC /* SearchViewController.swift */,
 				902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */,
 				9005F8F91C9B1D810091EB5C /* EpisodesTableViewController.swift */,
+				9005F8FB1CA03ADE0091EB5C /* ActorsTableViewController.swift */,
 				902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */,
 				902646401C9A17A200E2537A /* UIImageColors.swift */,
 				902646421C9AE91D00E2537A /* Int + intToTime.swift */,
@@ -192,6 +195,7 @@
 				902705E01C976DC900755ADC /* Serie.swift in Sources */,
 				902705EA1C984F7C00755ADC /* MySeries.swift in Sources */,
 				9005F8FA1C9B1D810091EB5C /* EpisodesTableViewController.swift in Sources */,
+				9005F8FC1CA03ADE0091EB5C /* ActorsTableViewController.swift in Sources */,
 				9005F8F81C9B12670091EB5C /* Season.swift in Sources */,
 				902705EC1C98874B00755ADC /* SeriesInfoViewController.swift in Sources */,
 			);
