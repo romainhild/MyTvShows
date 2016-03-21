@@ -8,12 +8,37 @@
 
 import Foundation
 
-class MySeries {
+class MySeries: NSObject {
     var series = [Serie]()
     var delegate: MySeriesDelegate?
+    var previousTime = ""
+    
+    var currentChararcterParsed = ""
     
     var count: Int {
         return series.count
+    }
+    
+    override init() {
+        super.init()
+        
+        let tvDBApi = TvDBApiSingleton.sharedInstance
+        let url = tvDBApi.urlForCurrentTime()
+        let session = NSURLSession.sharedSession()
+        let dataTask = session.dataTaskWithURL(url) {
+            data, response, error in
+            if let error = error where error.code == -999 {
+                return
+            }
+            else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
+                self.parseXMLData(data!)
+            }
+            else {
+                print("Failure! \(response)")
+            }
+        }
+        
+        dataTask.resume()
     }
     
     subscript(index: Int) -> Serie {
@@ -34,12 +59,87 @@ class MySeries {
     func remove(index: Int) {
         series.removeAtIndex(index)
     }
+    
+    func update() {
+        let tvDBApi = TvDBApiSingleton.sharedInstance
+        let url = tvDBApi.urlForUpdateWithTime(previousTime)
+        let session = NSURLSession.sharedSession()
+        let dataTask = session.dataTaskWithURL(url) {
+            data, response, error in
+            if let error = error where error.code == -999 {
+                return
+            }
+            else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
+                self.parseXMLData(data!)
+            }
+            else {
+                print("Failure! \(response)")
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
+    func serieWithId(id: String) -> Serie? {
+        if let i = series.indexOf( { $0.seriesid == id } ) {
+            return series[i]
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func episodeWithId(id: String) -> Episode? {
+        for serie in series {
+            for season in serie.seasons {
+                if let i = season.episodes.indexOf({$0.epId == id }) {
+                    return season.episodes[i]
+                }
+            }
+        }
+        return nil
+    }
 }
 
 extension MySeries: SerieDelegate {
     func serieFinishedInit(serie: Serie) {
         series.sortInPlace(<)
         delegate?.mySeriesNeedRefresh(self)
+    }
+}
+
+extension MySeries: NSXMLParserDelegate {
+    func parseXMLData(data: NSData) -> Bool {
+        let parser = NSXMLParser(data: data)
+        parser.delegate = self
+        return parser.parse()
+    }
+    
+    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        currentChararcterParsed = ""
+    }
+    
+    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "Time" {
+            previousTime = currentChararcterParsed
+        }
+        else if elementName == "Series" {
+            if let serie = serieWithId(currentChararcterParsed) {
+                serie.update()
+            }
+        }
+        else if elementName == "Episode" {
+            if let episode = episodeWithId(currentChararcterParsed) {
+                episode.update()
+            }
+        }
+        currentChararcterParsed = ""
+    }
+    
+    func parser(parser: NSXMLParser, foundCharacters string: String) {
+        if string != "\n" {
+            currentChararcterParsed += string
+        }
     }
 }
 

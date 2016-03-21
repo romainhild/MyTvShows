@@ -16,6 +16,7 @@ class MySeriesTableViewController: UITableViewController {
         super.viewDidLoad()
         
         mySeries.delegate = self
+        print(mySeries.previousTime)
 
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")

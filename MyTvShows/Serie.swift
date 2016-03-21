@@ -92,7 +92,8 @@ class Serie : NSObject {
             data, response, error in
             if let error = error where error.code == -999 {
                 return
-            } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
+            }
+            else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                 if self.parseXMLData(data!) {
                     self.seasons.sortInPlace(<)
                     self.findNextEpisode()
@@ -101,12 +102,41 @@ class Serie : NSObject {
                     self.error = true
                     print("Error while parsing series")
                 }
-            } else {
+            }
+            else {
                 print("Failure! \(response)")
                 self.error = true
             }
         }
         dataTask.resume()
+    }
+    
+    func update() {
+        let tvDBApi = TvDBApiSingleton.sharedInstance
+        let url = tvDBApi.urlForUpdatingSerieWithId(seriesid)
+        
+        let session = NSURLSession.sharedSession()
+        let dataTask = session.dataTaskWithURL(url) {
+            data, response, error in
+            if let error = error where error.code == -999 {
+                return
+            }
+            else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
+                if self.parseXMLData(data!) {
+                    self.seasons.sortInPlace(<)
+                    self.findNextEpisode()
+                    self.delegate?.serieFinishedInit(self)
+                } else {
+                    self.error = true
+                    print("Error while parsing series")
+                }
+            }
+            else {
+                print("Failure! \(response)")
+                self.error = true
+            }
+        }
+        dataTask.resume()        
     }
     
     func indexOfSeasonWithId(id: String) -> Int? {
@@ -289,18 +319,24 @@ extension Serie: NSXMLParserDelegate {
                     self.addedBy = addedBy
                 }
             case "banner":
-                banner = currentCharactersParsed
-                downloadImage(.Banner)
+                if banner != currentCharactersParsed {
+                    banner = currentCharactersParsed
+                    downloadImage(.Banner)
+                }
             case "fanart":
-                fanart = currentCharactersParsed
-                downloadImage(.FanArt)
+                if fanart != currentCharactersParsed {
+                    fanart = currentCharactersParsed
+                    downloadImage(.FanArt)
+                }
             case "lastupdated":
                 if let interval = Double(currentCharactersParsed) {
                     lastupdated = NSDate(timeIntervalSince1970: interval)
                 }
             case "poster":
-                poster = currentCharactersParsed
-                downloadImage(.Poster)
+                if poster != currentCharactersParsed {
+                    poster = currentCharactersParsed
+                    downloadImage(.Poster)
+                }
             case "zap2it_id":
                 zap2itId = currentCharactersParsed
             default:
