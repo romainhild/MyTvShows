@@ -23,7 +23,7 @@
 		902705E01C976DC900755ADC /* Serie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705DF1C976DC900755ADC /* Serie.swift */; };
 		902705E21C976FD500755ADC /* SerieBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 902705E11C976FD500755ADC /* SerieBannerCell.xib */; };
 		902705E41C97716C00755ADC /* SerieBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E31C97716C00755ADC /* SerieBannerTableViewCell.swift */; };
-		902705E61C981FE400755ADC /* UIImageView + DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */; };
+		902705E61C981FE400755ADC /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E51C981FE400755ADC /* HelperFunctions.swift */; };
 		902705E81C9821EF00755ADC /* TvDBApiSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E71C9821EF00755ADC /* TvDBApiSingleton.swift */; };
 		902705EA1C984F7C00755ADC /* MySeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705E91C984F7C00755ADC /* MySeries.swift */; };
 		902705EC1C98874B00755ADC /* SeriesInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */; };
@@ -48,7 +48,7 @@
 		902705DF1C976DC900755ADC /* Serie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serie.swift; sourceTree = "<group>"; };
 		902705E11C976FD500755ADC /* SerieBannerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SerieBannerCell.xib; sourceTree = "<group>"; };
 		902705E31C97716C00755ADC /* SerieBannerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerieBannerTableViewCell.swift; sourceTree = "<group>"; };
-		902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView + DownloadImage.swift"; sourceTree = "<group>"; };
+		902705E51C981FE400755ADC /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		902705E71C9821EF00755ADC /* TvDBApiSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvDBApiSingleton.swift; sourceTree = "<group>"; };
 		902705E91C984F7C00755ADC /* MySeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySeries.swift; sourceTree = "<group>"; };
 		902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesInfoViewController.swift; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 				902705EB1C98874B00755ADC /* SeriesInfoViewController.swift */,
 				9005F8F91C9B1D810091EB5C /* EpisodesTableViewController.swift */,
 				9005F8FB1CA03ADE0091EB5C /* ActorsTableViewController.swift */,
-				902705E51C981FE400755ADC /* UIImageView + DownloadImage.swift */,
+				902705E51C981FE400755ADC /* HelperFunctions.swift */,
 				902646401C9A17A200E2537A /* UIImageColors.swift */,
 				902646421C9AE91D00E2537A /* Int + intToTime.swift */,
 				902705E71C9821EF00755ADC /* TvDBApiSingleton.swift */,
@@ -184,7 +184,7 @@
 			files = (
 				902705DE1C97687100755ADC /* MySeriesTableViewController.swift in Sources */,
 				902646411C9A17A200E2537A /* UIImageColors.swift in Sources */,
-				902705E61C981FE400755ADC /* UIImageView + DownloadImage.swift in Sources */,
+				902705E61C981FE400755ADC /* HelperFunctions.swift in Sources */,
 				902705CC1C97502700755ADC /* SearchViewController.swift in Sources */,
 				902705DC1C97583800755ADC /* SearchResult.swift in Sources */,
 				902705CA1C97502700755ADC /* AppDelegate.swift in Sources */,

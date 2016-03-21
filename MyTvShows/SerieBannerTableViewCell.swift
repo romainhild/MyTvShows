@@ -10,8 +10,6 @@ import UIKit
 
 class SerieBannerTableViewCell: UITableViewCell {
     
-    var downloadTask: NSURLSessionDownloadTask?
-
     @IBOutlet weak var bannerImageView: UIImageView!
     
     override func awakeFromNib() {
@@ -27,18 +25,13 @@ class SerieBannerTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        downloadTask?.cancel()
-        downloadTask = nil
         bannerImageView.image = nil
     }
     
     func configureForSerie(serie: Serie) {
         bannerImageView.image = UIImage()
-        if !serie.banner.isEmpty {
-            let tvDBApi = TvDBApiSingleton.sharedInstance
-            let url = tvDBApi.urlForBanner(serie.banner)
-            downloadTask = bannerImageView.loadImageWithURL(url)
+        if let url = serie.bannerLocalURL, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+            bannerImageView.image = image
         }
     }
 

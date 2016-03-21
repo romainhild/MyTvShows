@@ -23,7 +23,9 @@ class MySeriesTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        mySeries.append(Serie(id: "161511"))
+        let shameless = Serie(id: "161511")
+        shameless.delageteBanner = self
+        mySeries.append(shameless)
     }
 
     override func didReceiveMemoryWarning() {
@@ -119,6 +121,7 @@ extension MySeriesTableViewController: SearchViewControllerDelegate {
     
     func searchViewController(controller: SearchViewController, addSerie serie: Serie) {
         mySeries.append(serie)
+        serie.delageteBanner = self
         tableView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -126,6 +129,14 @@ extension MySeriesTableViewController: SearchViewControllerDelegate {
 
 extension MySeriesTableViewController: MySeriesDelegate {
     func mySeriesNeedRefresh(myseries: MySeries) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
+    }
+}
+
+extension MySeriesTableViewController: SerieBannerDelegate {
+    func serieFinishedDownloadBanner(serie: Serie) {
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }

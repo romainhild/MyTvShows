@@ -10,6 +10,12 @@ import Foundation
 
 class Serie : NSObject {
     
+    enum ImageType {
+        case Banner
+        case Poster
+        case FanArt
+    }
+    
     static let firstAiredFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -29,6 +35,9 @@ class Serie : NSObject {
     }()
     
     var delegate: SerieDelegate?
+    var delageteBanner: SerieBannerDelegate?
+    var delagetePoster: SeriePosterDelegate?
+    var delageteFanArt: SerieFanArtDelegate?
     
     var seriesid: String
     var seasons = [Season]()
@@ -50,9 +59,12 @@ class Serie : NSObject {
     var added: NSDate?
     var addedBy = -1
     var banner = ""
+    var bannerLocalURL: NSURL?
     var fanart = ""
+    var fanartLocalURL: NSURL?
     var lastupdated: NSDate?
     var poster = ""
+    var posterLocalURL: NSURL?
     var zap2itId = ""
     
     var posterColors: UIImageColors?
@@ -111,6 +123,55 @@ class Serie : NSObject {
                 }
             }
         }
+    }
+    
+    func downloadImage(type: ImageType) {
+        let tvDBApi = TvDBApiSingleton.sharedInstance
+        let url: NSURL
+        switch type {
+        case .Banner:
+            url = tvDBApi.urlForBanner(banner)
+        case .Poster:
+            url = tvDBApi.urlForBanner(poster)
+        case .FanArt:
+            url = tvDBApi.urlForBanner(fanart)
+        }
+        
+        let session = NSURLSession.sharedSession()
+        
+        let downloadTask = session.downloadTaskWithURL(url) {
+            [weak self, type] url, response, error in
+            if let error = error where error.code == -999 {
+                return
+            } else if error == nil, let url = url, destinationURL = localFilePathForUrl(url.absoluteString) {
+                // copy to sandbox
+                let fileManager = NSFileManager.defaultManager()
+                do {
+                    try fileManager.removeItemAtURL(destinationURL)
+                } catch {
+                    // Non-fatal: file probably doesn't exist
+                }
+                do {
+                    try fileManager.copyItemAtURL(url, toURL: destinationURL)
+                } catch let error as NSError {
+                    print("Could not copy file to disk: \(error.localizedDescription)")
+                }
+                switch type {
+                case .Banner:
+                    self?.bannerLocalURL = destinationURL
+                    self?.delageteBanner?.serieFinishedDownloadBanner(self!)
+                case .Poster:
+                    self?.posterLocalURL = destinationURL
+                    self?.delagetePoster?.serieFinishedDownloadPoster(self!)
+                case .FanArt:
+                    self?.fanartLocalURL = destinationURL
+                    self?.delageteFanArt?.serieFinishedDownloadFanArt(self!)
+                }
+                
+            }
+        }
+        
+        downloadTask.resume()
     }
 }
 
@@ -229,14 +290,17 @@ extension Serie: NSXMLParserDelegate {
                 }
             case "banner":
                 banner = currentCharactersParsed
+                downloadImage(.Banner)
             case "fanart":
                 fanart = currentCharactersParsed
+                downloadImage(.FanArt)
             case "lastupdated":
                 if let interval = Double(currentCharactersParsed) {
                     lastupdated = NSDate(timeIntervalSince1970: interval)
                 }
             case "poster":
                 poster = currentCharactersParsed
+                downloadImage(.Poster)
             case "zap2it_id":
                 zap2itId = currentCharactersParsed
             default:
@@ -254,6 +318,18 @@ extension Serie: NSXMLParserDelegate {
 
 protocol SerieDelegate: class {
     func serieFinishedInit(serie: Serie)
+}
+
+protocol SerieBannerDelegate: class {
+    func serieFinishedDownloadBanner(serie: Serie)
+}
+
+protocol SeriePosterDelegate: class {
+    func serieFinishedDownloadPoster(serie: Serie)
+}
+
+protocol SerieFanArtDelegate: class {
+    func serieFinishedDownloadFanArt(serie: Serie)
 }
 
 func < (lhs: Serie, rhs: Serie) -> Bool {

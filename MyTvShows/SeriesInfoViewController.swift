@@ -40,15 +40,18 @@ class SeriesInfoViewController: UIViewController {
 
         self.title = serie.seriesName
         
-        if !serie.poster.isEmpty {
-            let tvDBApi = TvDBApiSingleton.sharedInstance
-            let url = tvDBApi.urlForBanner(serie.poster)
-            downloadTask = posterView.loadImageWithURL(url, delegate: self)
+        if let url = serie.posterLocalURL, data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+            posterView.image = image
+            if serie.posterColors == nil {
+                serie.posterColors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
+            }
+            view.backgroundColor = serie.posterColors?.backgroundColor
             initIndexes()
         }
         
         tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0,
             right: 0)
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -408,10 +411,10 @@ extension SeriesInfoViewController: UITableViewDelegate {
     }
 }
 
-extension SeriesInfoViewController: UIImageViewDownloaderDelegate {
-    func imageViewDidFinishDownloading(imageView: UIImageView) {
-        serie.posterColors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
-        view.backgroundColor = serie.posterColors?.backgroundColor
-        tableView.reloadData()
+extension SeriesInfoViewController: SeriePosterDelegate {
+    func serieFinishedDownloadPoster(serie: Serie) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
     }
 }
