@@ -12,6 +12,13 @@ class MySeriesTableViewController: UITableViewController {
     
     var mySeries = MySeries()
     
+    lazy var formatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .ShortStyle
+        formatter.timeStyle = .ShortStyle
+        return formatter
+    }()
+    
     required init?(coder aDecoder: NSCoder) {
         mySeries = MySeries()
         super.init(coder: aDecoder)
@@ -31,14 +38,18 @@ class MySeriesTableViewController: UITableViewController {
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
         tableView.rowHeight = tableView.bounds.size.width*140/758
         
+//        print(tableView.contentInset)
+        
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(mySeries, action: "update", forControlEvents: .ValueChanged)
+        self.refreshControl?.addTarget(self, action: "update:", forControlEvents: .ValueChanged)
+//        
+//        print(tableView.contentInset)
         
 //        let shameless = Serie(id: "161511")
 //        shameless.delageteBanner = self
 //        mySeries.append(shameless)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -61,6 +72,15 @@ class MySeriesTableViewController: UITableViewController {
                 unarchiver.finishDecoding()
             }
         }
+    }
+    
+    func update(sender: UIRefreshControl) {
+        mySeries.update(self)
+        //self.refreshControl?.endRefreshing()
+        let d = NSDate(timeIntervalSince1970: Double(mySeries.previousTime)!)
+        let s = formatter.stringFromDate(d)
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Last update: \(s)")
+        print(tableView.contentInset)
     }
 
     // MARK: - Table view data source

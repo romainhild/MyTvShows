@@ -189,7 +189,8 @@ class Serie : NSObject, NSCoding {
                 if self.parseXMLData(data!) {
                     self.seasons.sortInPlace(<)
                     self.findNextEpisode()
-                    self.delegate?.serieFinishedInit(self)
+                    // crash if called
+                    //self.delegate?.serieFinishedInit(self)
                 } else {
                     self.error = true
                     print("Error while parsing series")

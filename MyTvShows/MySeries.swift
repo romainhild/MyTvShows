@@ -74,12 +74,12 @@ class MySeries: NSObject, NSCoding {
         series.removeAtIndex(index)
     }
     
-    func update() {
+    func update(sender: MySeriesTableViewController) {
         let tvDBApi = TvDBApiSingleton.sharedInstance
         let url = tvDBApi.urlForUpdateWithTime(previousTime)
         let session = NSURLSession.sharedSession()
         let dataTask = session.dataTaskWithURL(url) {
-            data, response, error in
+            [weak sender] data, response, error in
             if let error = error where error.code == -999 {
                 return
             }
@@ -88,6 +88,9 @@ class MySeries: NSObject, NSCoding {
             }
             else {
                 print("Failure! \(response)")
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                sender?.refreshControl?.endRefreshing()
             }
         }
         
