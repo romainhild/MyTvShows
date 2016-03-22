@@ -175,6 +175,31 @@ class Serie : NSObject, NSCoding {
         aCoder.encodeObject(nextEpisode, forKey: "nextEpisode")
     }
     
+    deinit {
+        let fileManager = NSFileManager.defaultManager()
+        if let url = bannerLocalURL, destinationURL = localFilePathForUrl(url.absoluteString) {
+            do {
+                try fileManager.removeItemAtURL(destinationURL)
+            } catch {
+                // Non-fatal: file probably doesn't exist
+            }
+        }
+        if let url = posterLocalURL, destinationURL = localFilePathForUrl(url.absoluteString) {
+            do {
+                try fileManager.removeItemAtURL(destinationURL)
+            } catch {
+                // Non-fatal: file probably doesn't exist
+            }
+        }
+        if let url = fanartLocalURL, destinationURL = localFilePathForUrl(url.absoluteString) {
+            do {
+                try fileManager.removeItemAtURL(destinationURL)
+            } catch {
+                // Non-fatal: file probably doesn't exist
+            }
+        }
+    }
+    
     func update() {
         let tvDBApi = TvDBApiSingleton.sharedInstance
         let url = tvDBApi.urlForUpdatingSerieWithId(seriesid)
