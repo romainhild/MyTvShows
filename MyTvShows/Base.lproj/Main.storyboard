@@ -22,6 +22,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="My Series" id="LXx-1f-NM2">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vTg-Wq-sOd">
+                            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="qLV-MH-5Zm" kind="presentation" identifier="AddSerie" id="t1t-DR-wws"/>
                             </connections>
@@ -76,6 +77,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Search new Series" id="9wC-7d-QyE">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="965-bw-6fS">
+                            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancel:" destination="BYZ-38-t0r" id="uGd-4G-f56"/>
                             </connections>
@@ -401,6 +403,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="zaS-HL-uGB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -419,6 +425,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="9ZO-z1-MWT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

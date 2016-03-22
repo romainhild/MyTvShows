@@ -46,6 +46,10 @@ class SeriesInfoViewController: UIViewController {
                 serie.posterColors = posterView.image?.getColors(CGSize(width: posterView.frame.size.width/4, height: posterView.frame.size.height/4))
             }
             view.backgroundColor = serie.posterColors?.backgroundColor
+            let navBar = self.navigationController?.navigationBar
+            navBar?.tintColor = serie.posterColors?.detailColor
+            //let attr = NSAttributedString(string: serie.seriesName, attributes: )
+            navBar?.titleTextAttributes = [NSForegroundColorAttributeName:serie.posterColors!.primaryColor]
         }
         initIndexes()
         tableView.reloadData()

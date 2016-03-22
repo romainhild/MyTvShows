@@ -33,6 +33,7 @@ class MySeriesTableViewController: UITableViewController {
         super.viewDidLoad()
         
         mySeries.delegate = self
+        setTintColor()
 
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
@@ -50,9 +51,18 @@ class MySeriesTableViewController: UITableViewController {
 //        mySeries.append(shameless)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        setTintColor()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setTintColor() {
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.redColor()]
+        self.navigationController?.navigationBar.tintColor = UIColor.redColor()
     }
     
     func save() {
