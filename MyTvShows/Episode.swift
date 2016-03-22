@@ -185,9 +185,11 @@ func < (lhs: Episode, rhs: Episode) -> Bool {
     }
 }
 
-func > (lhs: Episode, rhs: NSDate) -> Bool {
+func >= (lhs: Episode, rhs: NSDate) -> Bool {
+    let calendar = NSCalendar.currentCalendar()
     if let lhsDate = lhs.epFirstAired {
-        return lhsDate.compare(rhs) == .OrderedDescending
+        let order = calendar.compareDate(lhsDate, toDate: rhs, toUnitGranularity: .Day)
+        return order == .OrderedDescending || order == .OrderedSame
     }
     else {
         return false

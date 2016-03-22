@@ -211,7 +211,7 @@ class Serie : NSObject, NSCoding {
         let now = NSDate()
         if let lastSeason = seasons.last {
             for episode in lastSeason.episodes {
-                if episode > now {
+                if episode >= now {
                     nextEpisode = episode.epFirstAired!
                     break
                 }
