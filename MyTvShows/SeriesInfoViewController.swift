@@ -77,7 +77,7 @@ class SeriesInfoViewController: UIViewController {
             controller.colors = serie.posterColors
         }
         else if segue.identifier == "ActorsSegue" {
-            let controller = segue.destinationViewController as! ActorsTableViewController
+            let controller = segue.destinationViewController as! ActorsCollectionViewController
             controller.serie = serie
         }
     }
@@ -88,71 +88,71 @@ class SeriesInfoViewController: UIViewController {
 
         if !serie.overview.isEmpty {
             indexOfOverview = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if rows > 0 {
             numberOfRowsInSection.append(rows)
         }
-        section++
+        section += 1
         
         rows = 0
         if let _ = serie.nextEpisode {
             indexOfNextEpisode = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.seasons.isEmpty {
             indexOfAllEpisodes = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
             if let selectedIndex = selectedIndex where selectedIndex == indexOfAllEpisodes {
                 for _ in serie.seasons {
                     indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: section))
-                    rows++
+                    rows += 1
                 }
             }
         }
-        if !serie.actors.isEmpty {
-            indexOfActors = NSIndexPath(forRow: rows, inSection: section)
-            rows++
-        }
+        // display even if actors is empty
+        indexOfActors = NSIndexPath(forRow: rows, inSection: section)
+        rows += 1
+        
         if rows > 0 {
             numberOfRowsInSection.append(rows)
         }
-        section++
+        section += 1
 
         rows = 0
         if serie.rating != -1 {
             indexOfRatings = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.genre.isEmpty {
             for _ in serie.genre {
                 indexOfGenre.append(NSIndexPath(forRow: rows, inSection: section))
-                rows++
+                rows += 1
             }
         }
         if let _ = serie.firstAired {
             indexOfFirstAired = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.status.isEmpty {
             indexOfStatus = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.airsDayOfWeek.isEmpty {
             indexOfAirDay = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.airsTime.isEmpty {
             indexOfAirTime = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if !serie.network.isEmpty {
             indexOfNetwork = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if serie.runtime != -1 {
             indexOfRuntime = NSIndexPath(forRow: rows, inSection: section)
-            rows++
+            rows += 1
         }
         if rows > 0 {
             numberOfRowsInSection.append(rows)
@@ -170,13 +170,13 @@ class SeriesInfoViewController: UIViewController {
         indexOfSeasons = [NSIndexPath]()
         
         if let _ = indexOfAllEpisodes {
-            rows++
+            rows += 1
         }
         
         if let selectedIndex = selectedIndex where selectedIndex == indexOfAllEpisodes {
             for _ in serie.seasons {
                 indexOfSeasons.append(NSIndexPath(forRow: rows, inSection: indexOfAllEpisodes!.section))
-                rows++
+                rows += 1
             }
             numberOfRowsInSection[indexOfAllEpisodes!.section] += serie.numberOfSeasons
         }

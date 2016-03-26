@@ -39,15 +39,11 @@ class MySeriesTableViewController: UITableViewController {
         tableView.registerNib(cellNib, forCellReuseIdentifier: "SerieBannerCell")
         tableView.rowHeight = tableView.bounds.size.width*140/758
         
-//        print(tableView.contentInset)
-        
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(self, action: "update:", forControlEvents: .ValueChanged)
-//        
-//        print(tableView.contentInset)
+        self.refreshControl?.addTarget(self, action: #selector(MySeriesTableViewController.update(_:)), forControlEvents: .ValueChanged)
         
 //        let shameless = Serie(id: "161511")
-//        shameless.delageteBanner = self
+//        shameless.delegateBanner = self
 //        mySeries.append(shameless)
     }
     
@@ -86,11 +82,9 @@ class MySeriesTableViewController: UITableViewController {
     
     func update(sender: UIRefreshControl) {
         mySeries.update(self)
-        //self.refreshControl?.endRefreshing()
         let d = NSDate(timeIntervalSince1970: Double(mySeries.previousTime)!)
         let s = formatter.stringFromDate(d)
         self.refreshControl?.attributedTitle = NSAttributedString(string: "Last update: \(s)")
-        print(tableView.contentInset)
     }
 
     // MARK: - Table view data source

@@ -43,7 +43,7 @@ class ActorsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ActorCell", forIndexPath: indexPath)
         cell.backgroundColor = serie.posterColors?.backgroundColor
-        cell.textLabel?.text = serie.actors[indexPath.row]
+        cell.textLabel?.text = serie.actorsAsString[indexPath.row]
         cell.textLabel?.textColor = serie.posterColors?.primaryColor
 
         return cell

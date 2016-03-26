@@ -55,4 +55,8 @@ class TvDBApiSingleton {
     func urlForUpdateWithTime(time: String) -> NSURL {
         return NSURL(string: "\(mirror)/api/Updates.php?type=all&time=\(time)")!
     }
+    
+    func urlForActorsForSerieId(id: String) -> NSURL {
+        return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)/actors.xml")!
+    }
 }

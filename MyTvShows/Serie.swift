@@ -42,7 +42,8 @@ class Serie : NSObject, NSCoding {
     var seriesid: String
     var seasons = [Season]()
     
-    var actors = [String]()
+    var actorsAsString = [String]()
+    var actors = [Actor]()
     var airsDayOfWeek = ""
     var airsTime = ""
     var firstAired: NSDate?
@@ -117,7 +118,8 @@ class Serie : NSObject, NSCoding {
         seriesid = aDecoder.decodeObjectForKey("seriesid") as!  String
         seasons = aDecoder.decodeObjectForKey("seasons") as!  [Season]
         
-        actors = aDecoder.decodeObjectForKey("actors") as!  [String]
+        actorsAsString = aDecoder.decodeObjectForKey("actorsAsString") as! [String]
+        actors = aDecoder.decodeObjectForKey("actors") as!  [Actor]
         airsDayOfWeek = aDecoder.decodeObjectForKey("airsDayOfWeek") as!  String
         airsTime = aDecoder.decodeObjectForKey("airsTime") as!  String
         firstAired = aDecoder.decodeObjectForKey("firstAired") as!  NSDate?
@@ -148,6 +150,7 @@ class Serie : NSObject, NSCoding {
         aCoder.encodeObject(seriesid, forKey: "seriesid")
         aCoder.encodeObject(seasons, forKey: "seasons")
         
+        aCoder.encodeObject(actorsAsString, forKey: "actorsAsString")
         aCoder.encodeObject(actors, forKey: "actors")
         aCoder.encodeObject(airsDayOfWeek, forKey: "airsDayOfWeek")
         aCoder.encodeObject(airsTime, forKey: "airsTime")
@@ -368,7 +371,7 @@ extension Serie: NSXMLParserDelegate {
         else { // Serie
             switch elementName {
             case "Actors":
-                actors = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
+                actorsAsString = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
             case "Airs_DayOfWeek":
                 airsDayOfWeek = currentCharactersParsed
             case "Airs_Time":

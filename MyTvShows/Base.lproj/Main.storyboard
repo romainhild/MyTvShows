@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="84I-bO-DaD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="84I-bO-DaD">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -243,7 +243,7 @@
                         <outlet property="posterView" destination="TEC-uL-s1N" id="sdb-Av-6Xb"/>
                         <outlet property="tableView" destination="AGu-s1-DBm" id="AJt-Qy-0gb"/>
                         <segue destination="x5M-Gc-ydx" kind="show" identifier="SeasonSegue" id="UWf-zF-XRc"/>
-                        <segue destination="gpy-2w-5L7" kind="show" identifier="ActorsSegue" id="Sfw-y6-Thc"/>
+                        <segue destination="ZKr-WL-GGh" kind="show" identifier="ActorsSegue" id="jau-y2-xYj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="spR-dk-bXA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -358,40 +358,78 @@
             </objects>
             <point key="canvasLocation" x="2077" y="97"/>
         </scene>
-        <!--Actors Table View Controller-->
-        <scene sceneID="aRr-RX-4az">
+        <!--Actors Collection View Controller-->
+        <scene sceneID="Qub-Rk-isW">
             <objects>
-                <tableViewController id="gpy-2w-5L7" customClass="ActorsTableViewController" customModule="MyTvShows" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Say-3n-5Gs">
+                <collectionViewController id="ZKr-WL-GGh" customClass="ActorsCollectionViewController" customModule="MyTvShows" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="vYo-ze-w1g">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ActorCell" textLabel="Yqs-7K-tqz" style="IBUITableViewCellStyleDefault" id="6RZ-mI-dDK">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6RZ-mI-dDK" id="yMe-fo-oJh">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="a7d-tm-FYC">
+                            <size key="itemSize" width="267" height="383"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ActorCell" id="WIv-Xm-WYH" customClass="ActorCollectionViewCell" customModule="MyTvShows" customModuleProvider="target">
+                                <rect key="frame" x="142" y="64" width="316" height="524"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="316" height="524"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Yqs-7K-tqz">
-                                            <rect key="frame" x="15" y="0.0" width="570" height="43"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i6O-dg-INg">
+                                            <rect key="frame" x="8" y="8" width="300" height="450"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="i6O-dg-INg" secondAttribute="height" multiplier="2:3" id="VZh-7f-Gle"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Actor" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZ3-JZ-Ix7">
+                                            <rect key="frame" x="8" y="466" width="300" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="wao-El-llg"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Role" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohm-hu-S1o">
+                                            <rect key="frame" x="8" y="487" width="300" height="29"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="AZ3-JZ-Ix7" firstAttribute="trailing" secondItem="WIv-Xm-WYH" secondAttribute="trailingMargin" id="C3z-Og-VeJ"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="Ohm-hu-S1o" secondAttribute="bottom" id="CmK-Fc-NCN"/>
+                                    <constraint firstItem="Ohm-hu-S1o" firstAttribute="top" secondItem="AZ3-JZ-Ix7" secondAttribute="bottom" id="Ded-lD-9ut"/>
+                                    <constraint firstItem="i6O-dg-INg" firstAttribute="trailing" secondItem="WIv-Xm-WYH" secondAttribute="trailingMargin" id="Ry0-ak-Gu3"/>
+                                    <constraint firstItem="i6O-dg-INg" firstAttribute="leading" secondItem="WIv-Xm-WYH" secondAttribute="leadingMargin" id="Vyj-LV-Rgr"/>
+                                    <constraint firstItem="AZ3-JZ-Ix7" firstAttribute="top" secondItem="i6O-dg-INg" secondAttribute="bottom" constant="8" id="d7g-2K-iv9"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="Ohm-hu-S1o" secondAttribute="trailing" id="gOL-uw-qkS"/>
+                                    <constraint firstItem="Ohm-hu-S1o" firstAttribute="leading" secondItem="WIv-Xm-WYH" secondAttribute="leadingMargin" id="jE1-un-qIi"/>
+                                    <constraint firstItem="AZ3-JZ-Ix7" firstAttribute="leading" secondItem="WIv-Xm-WYH" secondAttribute="leadingMargin" id="qDt-g4-eQr"/>
+                                    <constraint firstItem="i6O-dg-INg" firstAttribute="top" secondItem="WIv-Xm-WYH" secondAttribute="topMargin" id="y8o-Uh-llD"/>
+                                </constraints>
+                                <size key="customSize" width="316" height="524"/>
+                                <connections>
+                                    <outlet property="actorImage" destination="i6O-dg-INg" id="LMj-yR-AOK"/>
+                                    <outlet property="actorLabel" destination="AZ3-JZ-Ix7" id="hdT-nz-hKB"/>
+                                    <outlet property="roleLabel" destination="Ohm-hu-S1o" id="VLB-Vj-Pez"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
                         <connections>
-                            <outlet property="dataSource" destination="gpy-2w-5L7" id="b3B-Si-qjx"/>
-                            <outlet property="delegate" destination="gpy-2w-5L7" id="0vj-bp-kTU"/>
+                            <outlet property="dataSource" destination="ZKr-WL-GGh" id="w2w-rt-6k8"/>
+                            <outlet property="delegate" destination="ZKr-WL-GGh" id="ruC-eX-RUT"/>
                         </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KuV-N1-HmO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qjB-ng-fzQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2077" y="-661"/>
         </scene>
