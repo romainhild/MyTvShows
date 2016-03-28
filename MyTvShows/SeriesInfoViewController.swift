@@ -31,6 +31,8 @@ class SeriesInfoViewController: UIViewController {
     var numberOfRowsInSection = [Int]()
     
     var selectedIndex: NSIndexPath?
+    
+    var scrollPosition: CGFloat = 0.0
 
     @IBOutlet weak var posterView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
@@ -57,19 +59,20 @@ class SeriesInfoViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         tableView.contentInset = UIEdgeInsets(top: posterView.frame.size.height, left: 0, bottom: 0, right: 0)
-        tableView.setContentOffset(CGPoint(x: 0, y: -posterView.frame.size.height), animated: true)
+        tableView.setContentOffset(CGPoint(x: 0, y: scrollPosition-posterView.frame.size.height), animated: true)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        scrollPosition = tableView.contentOffset.y + posterView.frame.size.height
+        
         if segue.identifier == "SeasonSegue" {
             let controller = segue.destinationViewController as! EpisodesTableViewController
             let season = sender as! Season
