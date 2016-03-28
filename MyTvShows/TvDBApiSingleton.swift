@@ -60,3 +60,54 @@ class TvDBApiSingleton {
         return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)/actors.xml")!
     }
 }
+
+class TvDBActorParser: NSObject, NSXMLParserDelegate {
+    static let sharedInstance = TvDBActorParser()
+    
+    var delegate: TvDBActorParserDelegate?
+    
+    var currentCharacterParsed = ""
+    var currentActor: Actor?
+    
+    func parseActorData(data: NSData) -> Bool {
+        let parser = NSXMLParser(data: data)
+        parser.delegate = self
+        return parser.parse()
+    }
+    
+    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        if elementName == "Actor" {
+            currentActor = Actor()
+        }
+        currentCharacterParsed = ""
+    }
+    
+    func parser(parser: NSXMLParser, foundCharacters string: String) {
+        if string != "\n" {
+            currentCharacterParsed += string
+        }
+    }
+    
+    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "Actor" {
+            delegate?.parser(self, parsedActor: currentActor!)
+            currentActor = nil
+        }
+        else if elementName == "Image" {
+            currentActor?.imageURL = currentCharacterParsed
+        }
+        else if elementName == "Name" {
+            currentActor?.name = currentCharacterParsed
+        }
+        else if elementName == "Role" {
+            currentActor?.role = currentCharacterParsed
+        }
+        else if elementName == "SortOrder" {
+            currentActor?.sortOrder = Int(currentCharacterParsed)!
+        }
+    }
+}
+
+protocol TvDBActorParserDelegate {
+    func parser(parser: TvDBActorParser, parsedActor actor: Actor)
+}
