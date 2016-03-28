@@ -12,8 +12,6 @@ class SearchViewController: UIViewController {
     
     var delegate: SearchViewControllerDelegate?
     
-    var language = ""
-
     var searchResults = [SearchResult]()
     var hasSearched = false
     
@@ -41,18 +39,6 @@ class SearchViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func urlWithSearchText(searchText: String) -> NSURL {
-        let tvDBApi = TvDBApiSingleton.sharedInstance
-        let url = tvDBApi.urlForSearch(searchText)
-        return url
-    }
-    
-    func parseXML(data: NSData) -> Bool {
-        let parser = NSXMLParser(data: data)
-        parser.delegate = self
-        return parser.parse()
-    }
-    
     func showNetworkError() {
         let alert = UIAlertController(title: "Whoops...", message: "There was an error reading from the TvDB. Please try again.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
@@ -70,7 +56,7 @@ extension SearchViewController: UISearchBarDelegate {
             
             searchResults = [SearchResult]()
             
-            let url = urlWithSearchText(searchBar.text!)
+            let url = TvDBApiSingleton.sharedInstance.urlForSearch(searchBar.text!)
             
             let session = NSURLSession.sharedSession()
             
@@ -80,7 +66,8 @@ extension SearchViewController: UISearchBarDelegate {
                     return
                 } else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
                     //print("Success! \(data!)")
-                    if self.parseXML(data!) {
+                    TvDBSearchParser.sharedInstance.delegate = self
+                    if TvDBSearchParser.sharedInstance.parseSearchData(data!) {
                         self.searchResults.sortInPlace(<)
                     
                         dispatch_async(dispatch_get_main_queue()) {
@@ -162,27 +149,10 @@ extension SearchViewController: UITableViewDelegate {
     }
 }
 
-extension SearchViewController: NSXMLParserDelegate {
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        if elementName == "Series" {
-            searchResults.append(SearchResult())
-        }
-        currentElementParsed = elementName
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
-        if string != "\n" {
-            switch currentElementParsed {
-            case "seriesid":
-                searchResults.last!.id = string
-            case "SeriesName":
-                searchResults.last!.name += string
-            case "language":
-                searchResults.last!.lang = string
-            default:
-                break
-            }
-        }
+extension SearchViewController: TvDBSearchParserDelegate {
+    func parser(parser: TvDBSearchParser, parsedSearchResult search: SearchResult) {
+        searchResults.append(search)
+        print(searchResults.count)
     }
 }
 
