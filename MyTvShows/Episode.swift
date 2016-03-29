@@ -86,11 +86,8 @@ class Episode: NSObject, NSCoding {
                 return
             }
             else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                if !self.parseXMLData(data!) {
-//                    self.seasons.sortInPlace(<)
-//                    self.findNextEpisode()
-//                    self.delegate?.serieFinishedInit(self)
-//                } else {
+                let parser = TvDBEpisodeParser(episode: self)
+                if !parser.parseEpisodeData(data!) {
                     print("Error while parsing episode")
                 }
             }
@@ -103,71 +100,6 @@ class Episode: NSObject, NSCoding {
     
     func isFromSeason(season: Int) -> Bool {
         return epSeason == season
-    }
-}
-
-extension Episode: NSXMLParserDelegate {
-    func parseXMLData(data: NSData) -> Bool {
-        let parser = NSXMLParser(data: data)
-        parser.delegate = self
-        return parser.parse()
-    }
-    
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        currentCharactersParsed = ""
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
-        if string != "\n" {
-            currentCharactersParsed += string
-        }
-    }
-    
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        switch elementName {
-        case "id":
-            epId = currentCharactersParsed
-        case "Director":
-            epDirector = currentCharactersParsed
-        case "EpisodeName":
-            epName = currentCharactersParsed
-        case "EpisodeNumber":
-            if let number = Int(currentCharactersParsed) {
-                epNumber = number
-            }
-        case "FirstAired":
-            epFirstAired = Serie.firstAiredFormatter.dateFromString(currentCharactersParsed)
-        case "IMDB_ID":
-            epImdbId = currentCharactersParsed
-        case "Language":
-            epLanguage = currentCharactersParsed
-        case "Overview":
-            epOverview = currentCharactersParsed
-        case "Rating":
-            if let rating = Double(currentCharactersParsed) {
-                epRating = rating
-            }
-        case "RatingCount":
-            if let ratingCount = Int(currentCharactersParsed) {
-                epRatingCount = ratingCount
-            }
-        case "SeasonNumber":
-            if let number = Int(currentCharactersParsed) {
-                epSeason = number
-            }
-        case "filename":
-            epFilename = currentCharactersParsed
-        case "lastupdated":
-            if let interval = Double(currentCharactersParsed) {
-                epLastUpdated = NSDate(timeIntervalSince1970: interval)
-            }
-        case "seasonid":
-            seasonId = currentCharactersParsed
-        case "seriesid":
-            serieId = currentCharactersParsed
-        default:
-            break
-        }
     }
 }
 

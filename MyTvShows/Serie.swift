@@ -95,7 +95,8 @@ class Serie : NSObject, NSCoding {
                 return
             }
             else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                if self.parseXMLData(data!) {
+                let parser = TvDBSerieParser(serie: self)
+                if parser.parseSerieData(data!) {
                     self.seasons.sortInPlace(<)
                     self.findNextEpisode()
                     self.delegate?.serieFinishedInit(self)
@@ -214,7 +215,8 @@ class Serie : NSObject, NSCoding {
                 return
             }
             else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                if self.parseXMLData(data!) {
+                let parser = TvDBSerieParser(serie: self)
+                if parser.parseSerieData(data!) {
                     self.seasons.sortInPlace(<)
                     self.findNextEpisode()
                     // crash if called
@@ -294,153 +296,6 @@ class Serie : NSObject, NSCoding {
         }
         
         downloadTask.resume()
-    }
-}
-
-extension Serie: NSXMLParserDelegate {
-    func parseXMLData(data: NSData) -> Bool {
-        let parser = NSXMLParser(data: data)
-        parser.delegate = self
-        return parser.parse()
-    }
-    
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        currentCharactersParsed = ""
-        if elementName == "Episode" {
-            currentEpisodeParsed = Episode()
-        }
-    }
-    
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if let episode = currentEpisodeParsed { // Episode
-            switch elementName {
-            case "id":
-                episode.epId = currentCharactersParsed
-            case "Director":
-                episode.epDirector = currentCharactersParsed
-            case "EpisodeName":
-                episode.epName = currentCharactersParsed
-            case "EpisodeNumber":
-                if let number = Int(currentCharactersParsed) {
-                    episode.epNumber = number
-                }
-            case "FirstAired":
-                episode.epFirstAired = Serie.firstAiredFormatter.dateFromString(currentCharactersParsed)
-            case "IMDB_ID":
-                episode.epImdbId = currentCharactersParsed
-            case "Language":
-                episode.epLanguage = currentCharactersParsed
-            case "Overview":
-                episode.epOverview = currentCharactersParsed
-            case "Rating":
-                if let rating = Double(currentCharactersParsed) {
-                    episode.epRating = rating
-                }
-            case "RatingCount":
-                if let ratingCount = Int(currentCharactersParsed) {
-                    episode.epRatingCount = ratingCount
-                }
-            case "SeasonNumber":
-                if let number = Int(currentCharactersParsed) {
-                    episode.epSeason = number
-                }
-            case "filename":
-                episode.epFilename = currentCharactersParsed
-            case "lastupdated":
-                if let interval = Double(currentCharactersParsed) {
-                    episode.epLastUpdated = NSDate(timeIntervalSince1970: interval)
-                }
-            case "seasonid":
-                episode.seasonId = currentCharactersParsed
-            case "seriesid":
-                episode.serieId = currentCharactersParsed
-            case "Episode":
-                if let number = indexOfSeasonWithId(episode.seasonId) {
-                    seasons[number].append(episode)
-                }
-                else {
-                    let season = Season(id: episode.seasonId, number: episode.epSeason)
-                    season.append(episode)
-                    seasons.append(season)
-                }
-                currentEpisodeParsed = nil
-            default:
-                break
-            }
-        }
-        else { // Serie
-            switch elementName {
-            case "Actors":
-                actorsAsString = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
-            case "Airs_DayOfWeek":
-                airsDayOfWeek = currentCharactersParsed
-            case "Airs_Time":
-                airsTime = currentCharactersParsed
-            case "FirstAired":
-                firstAired = Serie.firstAiredFormatter.dateFromString(currentCharactersParsed)
-            case "Genre":
-                genre = currentCharactersParsed.componentsSeparatedByString("|").filter { !$0.isEmpty }
-            case "IMDB_ID":
-                imdbId = currentCharactersParsed
-            case "Language":
-                language = currentCharactersParsed
-            case "Network":
-                network = currentCharactersParsed
-            case "Overview":
-                overview = currentCharactersParsed
-            case "Rating":
-                if let rating = Double(currentCharactersParsed) {
-                    self.rating = rating
-                }
-            case "RatingCount":
-                if let ratingCount = Int(currentCharactersParsed) {
-                    self.ratingCount = ratingCount
-                }
-            case "Runtime":
-                if  let runtime = Int(currentCharactersParsed) {
-                    self.runtime = runtime
-                }
-            case "SeriesName":
-                seriesName = currentCharactersParsed
-            case "Status":
-                status = currentCharactersParsed
-            case "added":
-                added = Serie.addedFormatter.dateFromString(currentCharactersParsed)
-            case "addedBy":
-                if  let addedBy = Int(currentCharactersParsed) {
-                    self.addedBy = addedBy
-                }
-            case "banner":
-                if banner != currentCharactersParsed {
-                    banner = currentCharactersParsed
-                    downloadImage(.Banner)
-                }
-            case "fanart":
-                if fanart != currentCharactersParsed {
-                    fanart = currentCharactersParsed
-                    downloadImage(.FanArt)
-                }
-            case "lastupdated":
-                if let interval = Double(currentCharactersParsed) {
-                    lastupdated = NSDate(timeIntervalSince1970: interval)
-                }
-            case "poster":
-                if poster != currentCharactersParsed {
-                    poster = currentCharactersParsed
-                    downloadImage(.Poster)
-                }
-            case "zap2it_id":
-                zap2itId = currentCharactersParsed
-            default:
-                break
-            }
-        }
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
-        if string != "\n" {
-            currentCharactersParsed += string
-        }
     }
 }
 

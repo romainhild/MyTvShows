@@ -31,7 +31,8 @@ class MySeries: NSObject, NSCoding {
                 return
             }
             else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                self.parseXMLData(data!)
+                TvDBUpdateParser.sharedInstance.delegate = self
+                TvDBUpdateParser.sharedInstance.parseUpdateData(data!)
             }
             else {
                 print("Failure! \(response)")
@@ -84,7 +85,8 @@ class MySeries: NSObject, NSCoding {
                 return
             }
             else if let httpResponse = response as? NSHTTPURLResponse where httpResponse.statusCode == 200 {
-                self.parseXMLData(data!)
+                TvDBUpdateParser.sharedInstance.delegate = self
+                TvDBUpdateParser.sharedInstance.parseUpdateData(data!)
             }
             else {
                 print("Failure! \(response)")
@@ -125,37 +127,20 @@ extension MySeries: SerieDelegate {
     }
 }
 
-extension MySeries: NSXMLParserDelegate {
-    func parseXMLData(data: NSData) -> Bool {
-        let parser = NSXMLParser(data: data)
-        parser.delegate = self
-        return parser.parse()
+extension MySeries: TvDBUpdateParserDelegate {
+    func parser(parser: TvDBUpdateParser, parsedTime time: String) {
+        previousTime = time
     }
     
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        currentChararcterParsed = ""
+    func parser(parser: TvDBUpdateParser, parsedSeriesId seriesid: String) {
+        if let serie = serieWithId(seriesid) {
+            serie.update()
+        }
     }
     
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "Time" {
-            previousTime = currentChararcterParsed
-        }
-        else if elementName == "Series" {
-            if let serie = serieWithId(currentChararcterParsed) {
-                serie.update()
-            }
-        }
-        else if elementName == "Episode" {
-            if let episode = episodeWithId(currentChararcterParsed) {
-                episode.update()
-            }
-        }
-        currentChararcterParsed = ""
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
-        if string != "\n" {
-            currentChararcterParsed += string
+    func parser(parser: TvDBUpdateParser, parsedEpisodeId episodeid: String) {
+        if let episode = episodeWithId(episodeid) {
+            episode.update()
         }
     }
 }

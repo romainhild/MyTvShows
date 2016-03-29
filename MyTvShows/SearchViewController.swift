@@ -152,7 +152,6 @@ extension SearchViewController: UITableViewDelegate {
 extension SearchViewController: TvDBSearchParserDelegate {
     func parser(parser: TvDBSearchParser, parsedSearchResult search: SearchResult) {
         searchResults.append(search)
-        print(searchResults.count)
     }
 }
 
