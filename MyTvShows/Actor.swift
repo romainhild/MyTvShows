@@ -36,4 +36,15 @@ class Actor: NSObject, NSCoding {
         aCoder.encodeObject(imagePath, forKey: "imagePath")
         aCoder.encodeObject(sortOrder, forKey: "sortOrder")
     }
+    
+    deinit {
+        let fileManager = NSFileManager.defaultManager()
+        if let url = imagePath, destinationURL = localFilePathForUrl(url.absoluteString) {
+            do {
+                try fileManager.removeItemAtURL(destinationURL)
+            } catch {
+                // Non-fatal: file probably doesn't exist
+            }
+        }
+    }
 }

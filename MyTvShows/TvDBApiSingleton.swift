@@ -13,14 +13,22 @@ class TvDBApiSingleton {
     
     let apiKey = "38ECB8077661147B"
     let mirror = "https://thetvdb.com"
-    let lang = ""
+    var lang = ""
     var language: String {
         get {
             if !lang.isEmpty {
-                return "/language/\(lang).xml"
+                return "/\(lang).xml"
             } else {
                 return ""
             }
+        }
+    }
+    var languageSearch: String {
+        if !lang.isEmpty {
+            return "&language=\(lang)"
+        }
+        else {
+            return ""
         }
     }
     
@@ -40,7 +48,7 @@ class TvDBApiSingleton {
     
     func urlForSearch(searchText: String) -> NSURL {
         let escapedSearchText = searchText.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        return NSURL(string: "\(mirror)/api/GetSeries.php?seriesname=\(escapedSearchText)\(language)")!
+        return NSURL(string: "\(mirror)/api/GetSeries.php?seriesname=\(escapedSearchText)\(languageSearch)")!
     }
     
     func urlForBanner(banner: String) -> NSURL {
@@ -58,6 +66,10 @@ class TvDBApiSingleton {
     
     func urlForActorsForSerieId(id: String) -> NSURL {
         return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)/actors.xml")!
+    }
+    
+    func urlForLanguages() -> NSURL {
+        return NSURL(string: "\(mirror)/api/\(apiKey)/languages.xml")!
     }
 }
 
