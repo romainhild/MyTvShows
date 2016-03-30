@@ -10,7 +10,7 @@ import UIKit
 
 class MySeriesTableViewController: UITableViewController {
     
-    var mySeries = MySeries()
+    var mySeries: MySeries!
     
     lazy var formatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -19,20 +19,24 @@ class MySeriesTableViewController: UITableViewController {
         return formatter
     }()
     
-    required init?(coder aDecoder: NSCoder) {
-        mySeries = MySeries()
-        super.init(coder: aDecoder)
-        loadSeries()
+//    required init?(coder aDecoder: NSCoder) {
+//        mySeries = MySeries()
+//        super.init(coder: aDecoder)
+//        loadSeries()
+//        mySeries.delegate = self
+//    }
+//
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let tabBar = self.tabBarController as! SeriesTabBarController
+        mySeries = tabBar.mySeries
+        
         mySeries.delegate = self
         for serie in mySeries.series {
             serie.delegateBanner = self
         }
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        mySeries.delegate = self
         setTintColor()
 
         let cellNib = UINib(nibName: "SerieBannerCell", bundle: nil)
@@ -59,25 +63,7 @@ class MySeriesTableViewController: UITableViewController {
     func setTintColor() {
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.redColor()]
         self.navigationController?.navigationBar.tintColor = UIColor.redColor()
-    }
-    
-    func save() {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
-        archiver.encodeObject(mySeries, forKey: "mySeries")
-        archiver.finishEncoding()
-        data.writeToFile(prefPath(), atomically: true)
-    }
-    
-    func loadSeries() {
-        let path = prefPath()
-        if NSFileManager.defaultManager().fileExistsAtPath(path) {
-            if let data = NSData(contentsOfFile: path) {
-                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                mySeries = unarchiver.decodeObjectForKey("mySeries") as! MySeries
-                unarchiver.finishDecoding()
-            }
-        }
+        self.tabBarController?.tabBar.tintColor = UIColor.redColor()
     }
     
     func update(sender: UIRefreshControl) {

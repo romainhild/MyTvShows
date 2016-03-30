@@ -52,6 +52,7 @@ class SeriesInfoViewController: UIViewController {
             navBar?.tintColor = serie.posterColors?.detailColor
             //let attr = NSAttributedString(string: serie.seriesName, attributes: )
             navBar?.titleTextAttributes = [NSForegroundColorAttributeName:serie.posterColors!.primaryColor]
+            self.tabBarController?.tabBar.tintColor = serie.posterColors?.detailColor
         }
         initIndexes()
         tableView.reloadData()

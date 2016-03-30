@@ -44,9 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func saveData() {
-        let navigationController = window!.rootViewController as! UINavigationController
-        let controller = navigationController.viewControllers[0] as! MySeriesTableViewController
-        controller.save()
+        let tabBarController = window!.rootViewController as! SeriesTabBarController
+        tabBarController.save()
     }
 
 }
