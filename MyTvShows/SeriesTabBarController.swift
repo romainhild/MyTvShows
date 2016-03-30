@@ -40,6 +40,9 @@ class SeriesTabBarController: UITabBarController {
                 unarchiver.finishDecoding()
             }
         }
+        else {
+            mySeries = MySeries()
+        }
     }
     
 
