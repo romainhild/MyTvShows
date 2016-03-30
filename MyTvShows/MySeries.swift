@@ -12,6 +12,14 @@ class MySeries: NSObject, NSCoding {
     var series = [Serie]()
     var delegate: MySeriesDelegate?
     var previousTime = ""
+    var lang: String {
+        get {
+            return TvDBApiSingleton.sharedInstance.lang
+        }
+        set {
+            TvDBApiSingleton.sharedInstance.lang = newValue
+        }
+    }
     
     var currentChararcterParsed = ""
     
@@ -46,6 +54,7 @@ class MySeries: NSObject, NSCoding {
         series = aDecoder.decodeObjectForKey("series") as! [Serie]
         previousTime = aDecoder.decodeObjectForKey("previousTime") as! String
         super.init()
+        lang = aDecoder.decodeObjectForKey("lang") as! String
         for serie in series {
             serie.delegate = self
         }
@@ -54,6 +63,7 @@ class MySeries: NSObject, NSCoding {
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(series, forKey: "series")
         aCoder.encodeObject(previousTime, forKey: "previousTime")
+        aCoder.encodeObject(lang, forKey: "lang")
     }
     
     subscript(index: Int) -> Serie {

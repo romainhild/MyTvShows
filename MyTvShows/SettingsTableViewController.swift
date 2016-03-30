@@ -27,13 +27,7 @@ class SettingsTableViewController: UITableViewController {
         let tabBar = self.tabBarController as! SeriesTabBarController
         mySeries = tabBar.mySeries
         
-        let abbr = TvDBApiSingleton.sharedInstance.lang
-        if !abbr.isEmpty, let index = languages.indexOf( { $0.0 == abbr } ) {
-            languageLabel.text = languages[index].1
-        }
-        else {
-            languageLabel.text = "English"
-        }
+        languageLabel.text = TvDBApiSingleton.sharedInstance.lang
         
         if languages.isEmpty {
             let url = TvDBApiSingleton.sharedInstance.urlForLanguages()
@@ -48,6 +42,14 @@ class SettingsTableViewController: UITableViewController {
                     if parser.parseLanguageData(data!) {
                         self.languages = self.languages.sort {$0.1.compare($1.1) == .OrderedAscending }
                         dispatch_async(dispatch_get_main_queue()) {
+                            let abbr = TvDBApiSingleton.sharedInstance.lang
+                            if !abbr.isEmpty, let index = self.languages.indexOf( { $0.0 == abbr } ) {
+                                self.languageLabel.text = self.languages[index].1
+                            }
+                            else {
+                                self.languageLabel.text = "English"
+                                self.mySeries.lang = ""
+                            }
                             self.languagePicker.reloadAllComponents()
                         }
                     }
