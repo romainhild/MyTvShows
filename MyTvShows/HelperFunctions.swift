@@ -24,3 +24,11 @@ func localFilePathForUrl(previewUrl: String) -> NSURL? {
 func prefPath() -> String {
     return (documentsDirectory() as NSString).stringByAppendingPathComponent("pref.plist")
 }
+
+extension NSDate {
+    func isSameDay(date: NSDate) -> Bool {
+        let calendar = NSCalendar.currentCalendar()
+        let order = calendar.compareDate(self, toDate: date, toUnitGranularity: .Day)
+        return order == .OrderedSame
+    }
+}
