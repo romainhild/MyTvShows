@@ -92,7 +92,7 @@
             </objects>
             <point key="canvasLocation" x="2889" y="-1385"/>
         </scene>
-        <!--Series Info View Controller-->
+        <!--Title-->
         <scene sceneID="ZLD-Sq-AFL">
             <objects>
                 <viewController id="N6c-4U-i94" customClass="SeriesInfoViewController" customModule="MyTvShows" customModuleProvider="target" sceneMemberID="viewController">
@@ -111,7 +111,7 @@
                                 </constraints>
                             </imageView>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="AGu-s1-DBm">
-                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SeasonCell" textLabel="F4g-cb-Oov" style="IBUITableViewCellStyleDefault" id="imq-Yf-9g4">
@@ -239,11 +239,21 @@
                             <constraint firstItem="O0q-Bh-ALX" firstAttribute="top" secondItem="AGu-s1-DBm" secondAttribute="bottom" id="vlp-VM-XCI"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Title" id="wTN-ly-9Xx">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="J8w-84-GfY">
+                            <connections>
+                                <action selector="edit:" destination="N6c-4U-i94" id="Qcf-tf-iDb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="posterView" destination="TEC-uL-s1N" id="sdb-Av-6Xb"/>
                         <outlet property="tableView" destination="AGu-s1-DBm" id="AJt-Qy-0gb"/>
                         <segue destination="x5M-Gc-ydx" kind="show" identifier="SeasonSegue" id="UWf-zF-XRc"/>
                         <segue destination="ZKr-WL-GGh" kind="show" identifier="ActorsSegue" id="jau-y2-xYj"/>
+                        <segue destination="jaF-EE-HPq" kind="presentation" identifier="ChooseImageSegue" id="SEl-sB-2BK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="spR-dk-bXA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -357,6 +367,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IPT-E2-YbT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2889" y="97"/>
+        </scene>
+        <!--Choose Image Table View Controller-->
+        <scene sceneID="h6y-p2-eoF">
+            <objects>
+                <tableViewController id="hUd-ES-o0J" customClass="ChooseImageTableViewController" customModule="MyTvShows" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="gqb-fJ-RQA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BannerCell" id="kTw-RV-nNI">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kTw-RV-nNI" id="qC3-4g-pPj">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QZz-n9-KRu">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="QZz-n9-KRu" firstAttribute="leading" secondItem="qC3-4g-pPj" secondAttribute="leading" id="Pzv-2p-lao"/>
+                                        <constraint firstAttribute="bottom" secondItem="QZz-n9-KRu" secondAttribute="bottom" id="gFv-kw-fEL"/>
+                                        <constraint firstAttribute="trailing" secondItem="QZz-n9-KRu" secondAttribute="trailing" id="gxs-TE-eGr"/>
+                                        <constraint firstItem="QZz-n9-KRu" firstAttribute="top" secondItem="qC3-4g-pPj" secondAttribute="top" id="vTO-Jy-x2H"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="hUd-ES-o0J" id="99n-0E-sr0"/>
+                            <outlet property="delegate" destination="hUd-ES-o0J" id="EuP-3Q-vdH"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Qlk-kC-HkO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="zu3-in-D8t">
+                            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="cancel:" destination="hUd-ES-o0J" id="jFd-GH-ukB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yeQ-HL-r2w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3701" y="848"/>
         </scene>
         <!--Actors Collection View Controller-->
         <scene sceneID="Qub-Rk-isW">
@@ -612,8 +669,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="84I-bO-DaD" kind="relationship" relationship="viewControllers" id="GfI-2w-FbE"/>
-                        <segue destination="rbj-z0-kma" kind="relationship" relationship="viewControllers" id="ASR-IH-rPC"/>
                         <segue destination="ZG3-Fo-Yrc" kind="relationship" relationship="viewControllers" id="dlU-Y0-kMJ"/>
+                        <segue destination="rbj-z0-kma" kind="relationship" relationship="viewControllers" id="ASR-IH-rPC"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QIx-cO-Ior" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -665,6 +722,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oYF-hx-waN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="535" y="1618"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="WKI-RV-EEU">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jaF-EE-HPq" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="N8g-mG-hft">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="hUd-ES-o0J" kind="relationship" relationship="rootViewController" id="cpc-zf-Bzy"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1EA-cs-vgb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2889" y="848"/>
         </scene>
     </scenes>
     <resources>

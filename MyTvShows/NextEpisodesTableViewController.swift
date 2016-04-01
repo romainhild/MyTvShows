@@ -92,10 +92,10 @@ class NextEpisodesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("NextEpisodeCell", forIndexPath: indexPath)
 
         let episode = episodeAtIndexPath(indexPath)
-        cell.detailTextLabel?.text = episode.epName
+        cell.detailTextLabel?.text = String(format: "%02dx%02d %@", episode.epSeason, episode.epNumber, episode.epName)
         
         if let serie = mySeries.serieWithId(episode.serieId) {
-            cell.textLabel?.text = String(format: "%@ %02dx%02d", serie.seriesName, episode.epSeason, episode.epNumber)
+            cell.textLabel?.text = serie.seriesName
         }
 
         return cell

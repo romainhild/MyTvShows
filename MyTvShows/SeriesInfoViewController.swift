@@ -84,8 +84,37 @@ class SeriesInfoViewController: UIViewController {
             let controller = segue.destinationViewController as! ActorsCollectionViewController
             controller.serie = serie
         }
+        else if segue.identifier == "ChooseImageSegue" {
+            let navBar = segue.destinationViewController as! UINavigationController
+            let controller = navBar.topViewController as! ChooseImageTableViewController
+            controller.delegate = self
+            controller.serie = serie
+            controller.type = Serie.ImageType(rawValue: sender as! String)
+        }
     }
 
+    @IBAction func edit(sender: AnyObject) {
+        let alert = UIAlertController(title: "Edit \(serie.seriesName)", message: nil, preferredStyle: .ActionSheet)
+        let changeBanner = UIAlertAction(title: "Change Banner", style: .Default) {
+            _ in
+            self.performSegueWithIdentifier("ChooseImageSegue", sender: Serie.ImageType.Banner.rawValue)
+        }
+        alert.addAction(changeBanner)
+        let changePoster = UIAlertAction(title: "Change Poster", style: .Default) {
+            _ in
+            self.performSegueWithIdentifier("ChooseImageSegue", sender: Serie.ImageType.Poster.rawValue)
+        }
+        alert.addAction(changePoster)
+        let changeFanArt = UIAlertAction(title: "Change FanArt", style: .Default) {
+            _ in
+            self.performSegueWithIdentifier("ChooseImageSegue", sender: Serie.ImageType.FanArt.rawValue)
+        }
+        alert.addAction(changeFanArt)
+        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(cancel)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func initIndexes() {
         var section = 0
         var rows = 0
@@ -426,5 +455,23 @@ extension SeriesInfoViewController: SeriePosterDelegate {
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
+    }
+}
+
+extension SeriesInfoViewController: ChooseImageControllerDelegate {
+    func chooseImageControllerDidCancel(controller: ChooseImageTableViewController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func chooseImageController(controller: ChooseImageTableViewController, chooseBanner bannerURL: String) {
+        
+    }
+    
+    func chooseImageController(controller: ChooseImageTableViewController, choosePoster posterURL: String) {
+        
+    }
+    
+    func chooseImageController(controller: ChooseImageTableViewController, chooseFanArt fanArtURL: String) {
+        
     }
 }

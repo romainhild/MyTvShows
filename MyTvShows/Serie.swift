@@ -10,10 +10,10 @@ import Foundation
 
 class Serie : NSObject, NSCoding {
     
-    enum ImageType {
-        case Banner
-        case Poster
-        case FanArt
+    enum ImageType: String {
+        case Banner = "series"
+        case Poster = "poster"
+        case FanArt = "fanart"
     }
     
     static let firstAiredFormatter: NSDateFormatter = {
@@ -69,6 +69,7 @@ class Serie : NSObject, NSCoding {
     var zap2itId = ""
     var nextEpisode: NSDate?
     
+    var banners = [Banner]()
     var posterColors: UIImageColors?
     
     var numberOfSeasons: Int {
@@ -145,6 +146,8 @@ class Serie : NSObject, NSCoding {
         posterLocalURL = aDecoder.decodeObjectForKey("posterLocalURL") as!  NSURL?
         zap2itId = aDecoder.decodeObjectForKey("zap2itId") as!  String
         nextEpisode = aDecoder.decodeObjectForKey("nextEpisode") as!  NSDate?
+        
+        banners = aDecoder.decodeObjectForKey("banners") as! [Banner]
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
@@ -177,6 +180,8 @@ class Serie : NSObject, NSCoding {
         aCoder.encodeObject(posterLocalURL, forKey: "posterLocalURL")
         aCoder.encodeObject(zap2itId, forKey: "zap2itId")
         aCoder.encodeObject(nextEpisode, forKey: "nextEpisode")
+        
+        aCoder.encodeObject(banners, forKey: "banners")
     }
     
     deinit {
@@ -296,6 +301,10 @@ class Serie : NSObject, NSCoding {
         }
         
         downloadTask.resume()
+    }
+    
+    func bannersOfType(type: ImageType) -> [Banner] {
+        return banners.filter { $0.bannerType == type.rawValue }
     }
 }
 

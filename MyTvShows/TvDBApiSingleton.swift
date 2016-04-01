@@ -71,5 +71,9 @@ class TvDBApiSingleton {
     func urlForLanguages() -> NSURL {
         return NSURL(string: "\(mirror)/api/\(apiKey)/languages.xml")!
     }
+    
+    func urlForBannersForSerieID(id: String) -> NSURL {
+        return NSURL(string: "\(mirror)/api/\(apiKey)/series/\(id)/banners.xml")!
+    }
 }
 
